@@ -432,6 +432,35 @@
   .sobre-lado img { width: 100%; border-radius: 14px; border: 1.5px solid var(--laranja); box-shadow: 0 0 32px rgba(255, 69, 0,0.28); }
   .central .sobre-lado p { max-width: none; margin-left: 0; margin-right: 0; }
 
+  /* ---------- Foto em duas colunas ---------- */
+  .wrap-foto { max-width: 1000px; }
+  .wrap-foto.wrap-larga { max-width: 1120px; }
+  .foto-lado { display: grid; grid-template-columns: 1fr; gap: 28px; align-items: center; margin: 32px 0; }
+  .foto-lado:last-child { margin-bottom: 0; }
+  .foto { position: relative; width: 100%; max-width: 640px; margin: 0 auto; aspect-ratio: 16 / 10; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 69, 0, 0.35); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .foto::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(0, 3, 27, 0) 45%, rgba(0, 3, 27, 0.6) 100%), linear-gradient(135deg, rgba(255, 69, 0, 0.12), rgba(255, 69, 0, 0) 40%); }
+  .foto-texto > p:first-child { margin-top: 0 !important; }
+  .grafico { width: 100%; max-width: 520px; margin: 0 auto; padding: 22px 22px 16px; border-radius: 16px; border: 1px solid rgba(255, 69, 0, 0.35); background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+  .grafico svg { display: block; width: 100%; height: auto; font-family: inherit; }
+  .grafico figcaption { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--laranja); text-align: left; margin-bottom: 10px; }
+  .foto-lado.final { margin-top: 0; }
+  .foto-lado.final .foto { aspect-ratio: 1 / 1; max-width: 520px; }
+  @media (min-width: 820px) {
+    .foto-lado { grid-template-columns: 1fr 1fr; gap: 48px; margin: 40px 0; }
+    .foto { aspect-ratio: 4 / 3; max-width: none; }
+    .foto-lado.invertido .foto { order: 2; }
+    .grafico { max-width: none; }
+    .foto-texto { text-align: left; }
+    .central .foto-texto p { max-width: none; margin-left: 0; margin-right: 0; }
+    .foto-texto .cta-meio { justify-content: flex-start; }
+    .foto-lado.larga { grid-template-columns: 1.35fr 1fr; gap: 44px; }
+    .foto-lado.larga.invertido { grid-template-columns: 1fr 1.35fr; }
+    .foto-lado.larga .foto { aspect-ratio: 3 / 2; }
+    .foto-lado.larga.final { grid-template-columns: 1fr 1.1fr; }
+    .foto-lado.final .foto { aspect-ratio: 1 / 1; max-width: none; }
+  }
+
   /* ---------- Perguntas por área ---------- */
   .lista-perguntas { list-style: none; display: grid; gap: 12px; }
   .lista-perguntas li { font-size: 15px; font-weight: 600; color: var(--branco); line-height: 1.4; border-left: 2px solid var(--laranja); padding: 2px 0 2px 12px; }
@@ -479,12 +508,17 @@
 
 <!-- 02 - O PROBLEMA -->
 <section class="bg-fundo central">
-  <div class="wrap-estreito">
+  <div class="wrap-estreito wrap-foto">
     <h2>Vender não é o mesmo que lucrar.</h2>
-    <p style="margin-top:20px;">Seu e-commerce pode vender todos os dias e, ainda assim, você não saber quanto realmente sobra.</p>
-    <p>O dinheiro entra. Mas também sai: fornecedores, taxas, impostos, fretes, anúncios e outras despesas.</p>
-    <p>Quando tudo isso está espalhado, o faturamento não conta a história completa.</p>
-    <p class="lead" style="color:var(--branco); margin-top:24px;">Quando o controle é frágil, o problema costuma aparecer no caixa antes de aparecer no faturamento.</p>
+    <div class="foto-lado">
+      <figure class="grafico"><figcaption>Do que você vende ao que sobra</figcaption><svg viewBox="0 0 320 222" role="img" aria-label="Gráfico: das vendas saem custos, taxas, fretes e anúncios, até chegar ao que realmente sobra"><line x1="8" y1="190" x2="312" y2="190" stroke="#6B76A8" stroke-opacity="0.5"/><g stroke="#6B76A8" stroke-dasharray="3 3" stroke-opacity="0.7"><line x1="49" y1="40" x2="63" y2="40"/><line x1="99" y1="100" x2="113" y2="100"/><line x1="149" y1="128" x2="163" y2="128"/><line x1="199" y1="148" x2="213" y2="148"/><line x1="249" y1="170" x2="263" y2="170"/></g><rect x="13" y="40" width="36" height="150" rx="4" fill="#D8E1F6"/><g fill="#6B76A8" fill-opacity="0.75"><rect x="63" y="40" width="36" height="60" rx="4"/><rect x="113" y="100" width="36" height="28" rx="4"/><rect x="163" y="128" width="36" height="20" rx="4"/><rect x="213" y="148" width="36" height="22" rx="4"/></g><rect x="263" y="170" width="36" height="20" rx="4" fill="#ff4500"/><text x="281" y="160" text-anchor="middle" font-size="20" font-weight="700" fill="#ff4500">?</text><g font-size="10.5" fill="#D8E1F6" text-anchor="middle"><text x="31" y="208">Vendas</text><text x="81" y="208">Custos</text><text x="131" y="208">Taxas</text><text x="181" y="208">Fretes</text><text x="231" y="208">Anúncios</text><text x="281" y="208" font-weight="700" fill="#FFFFFF">Sobra</text></g></svg></figure>
+      <div class="foto-texto">
+        <p style="margin-top:20px;">Seu e-commerce pode vender todos os dias e, ainda assim, você não saber quanto realmente sobra.</p>
+        <p>O dinheiro entra. Mas também sai: fornecedores, taxas, impostos, fretes, anúncios e outras despesas.</p>
+        <p>Quando tudo isso está espalhado, o faturamento não conta a história completa.</p>
+        <p class="lead" style="color:var(--branco); margin-top:24px;">Quando o controle é frágil, o problema costuma aparecer no caixa antes de aparecer no faturamento.</p>
+      </div>
+    </div>
     <p style="margin-top:24px;">Você sabe quanto vendeu.</p>
     <p class="lead" style="color:var(--branco);">Mas sabe quanto realmente ganhou?</p>
     <p style="margin-top:12px;">E sabe se o dinheiro vai estar na conta quando os boletos vencerem?</p>
@@ -498,7 +532,6 @@
   <div class="wrap-estreito">
     <h2>A resposta não está em mais uma planilha.</h2>
     <p class="lead" style="color:var(--branco); margin-top:8px;">Está no que os seus números já dizem.</p>
-    <img src="assets/img/diagnostico-bastidores.jpg" alt="Empreendedora sorridente refletindo em frente ao notebook, representando a clareza que o diagnóstico traz para os números do negócio" style="max-width:640px; width:100%; border-radius:14px; margin:32px auto 28px; display:block; border:1.5px solid var(--laranja); box-shadow:0 0 32px rgba(255, 69, 0,0.28);">
     <p style="margin-top:36px;">O Diagnóstico Financeiro cruza os dados da sua operação e entrega o resultado pronto.</p>
     <p>Você não precisa saber quais cálculos fazer.</p>
     <p>Não precisa passar horas organizando números.</p>
@@ -599,13 +632,17 @@
 
 <!-- 06 - CLAREZA -->
 <section class="bg-fundo central">
-  <div class="wrap-estreito">
+  <div class="wrap-estreito wrap-foto">
     <h2>Uma análise completa.</h2>
     <p class="lead" style="color:var(--branco); margin-top:8px;">Uma resposta simples.</p>
-    <img src="assets/img/diagnostico-analise.webp" alt="Homem sorridente com fones de ouvido olhando para um tablet no sofá, representando a resposta simples que o diagnóstico entrega" style="max-width:640px; width:100%; border-radius:14px; margin:32px auto 28px; display:block; border:1.5px solid var(--laranja); box-shadow:0 0 32px rgba(255, 69, 0,0.28);">
-    <p>Existe muita coisa acontecendo por trás dos seus números.</p>
-    <p>Você não precisa receber toda essa complexidade.</p>
-    <p style="color:var(--branco); font-weight:600; margin-top:16px;">Nós fazemos a análise. Você recebe o que precisa saber para agir.</p>
+    <div class="foto-lado invertido">
+      <figure class="foto"><img src="assets/img/diagnostico-analise.webp" alt="Homem sorridente com fones de ouvido olhando para um tablet no sofá, representando a resposta simples que o diagnóstico entrega" loading="lazy"></figure>
+      <div class="foto-texto">
+        <p>Existe muita coisa acontecendo por trás dos seus números.</p>
+        <p>Você não precisa receber toda essa complexidade.</p>
+        <p style="color:var(--branco); font-weight:600; margin-top:16px;">Nós fazemos a análise. Você recebe o que precisa saber para agir.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -753,12 +790,16 @@
 
 <!-- 10b - A CADA TRIMESTRE -->
 <section class="central" id="trimestre">
-  <div class="wrap-estreito">
+  <div class="wrap-estreito wrap-foto">
     <div class="kicker">A cada trimestre</div>
     <h2>Um Diagnóstico mostra onde a loja está. O próximo mostra se ela mudou.</h2>
-    <img src="assets/img/diagnostico-dashboard.webp" alt="Equipe analisando painéis de gráficos e indicadores financeiros em uma tela, representando a análise completa do diagnóstico" style="max-width:640px; width:100%; border-radius:14px; margin:32px auto 28px; display:block; border:1.5px solid var(--laranja); box-shadow:0 0 32px rgba(255, 69, 0,0.28);">
-    <p style="margin-top:20px;">O Diagnóstico Financeiro analisa um período. Refeito a cada três meses, ele mostra o que mudou desde o último: o que melhorou, o que ainda pede atenção e se as ações deram resultado.</p>
-    <p style="color:var(--branco); font-weight:600; margin-top:16px;">Cada recomendação já vem com o sinal de que funcionou. No trimestre seguinte, dá para conferir.</p>
+    <div class="foto-lado">
+      <figure class="grafico"><figcaption>O que mudou de um trimestre para o outro</figcaption><svg viewBox="0 0 320 214" role="img" aria-label="Gráfico comparando o trimestre anterior com o trimestre atual: dois indicadores melhoraram e um ainda pede atenção"><rect x="28" y="8" width="10" height="10" rx="2" fill="#6B76A8" fill-opacity="0.75"/><text x="44" y="17" font-size="11" fill="#D8E1F6">Trimestre anterior</text><rect x="172" y="8" width="10" height="10" rx="2" fill="#ff4500"/><text x="188" y="17" font-size="11" fill="#D8E1F6">Trimestre atual</text><line x1="8" y1="200" x2="312" y2="200" stroke="#6B76A8" stroke-opacity="0.5"/><rect x="40" y="140" width="30" height="60" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="76" y="108" width="30" height="92" rx="4" fill="#ff4500"/><path d="M85 101L91 92L97 101Z" fill="#FFFFFF"/><rect x="132" y="116" width="30" height="84" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="168" y="78" width="30" height="122" rx="4" fill="#ff4500"/><path d="M177 71L183 62L189 71Z" fill="#FFFFFF"/><rect x="224" y="96" width="30" height="104" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="260" y="120" width="30" height="80" rx="4" fill="#ff4500"/><path d="M269 104L275 113L281 104Z" fill="#FFFFFF"/></svg></figure>
+      <div class="foto-texto">
+        <p style="margin-top:20px;">O Diagnóstico Financeiro analisa um período. Refeito a cada três meses, ele mostra o que mudou desde o último: o que melhorou, o que ainda pede atenção e se as ações deram resultado.</p>
+        <p style="color:var(--branco); font-weight:600; margin-top:16px;">Cada recomendação já vem com o sinal de que funcionou. No trimestre seguinte, dá para conferir.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -913,19 +954,24 @@
 
 <!-- CTA FINAL -->
 <section class="bg-fundo central">
-  <div class="wrap-estreito">
-    <h2>Você já tem os dados.</h2>
-    <p class="lead" style="color:var(--branco); margin-top:8px;">Agora precisa das respostas.</p>
-    <p style="margin-top:24px;">Seu e-commerce já gera números todos os dias.</p>
-    <p style="color:var(--branco); font-weight:600; margin-top:10px;">Faturamento. Vendas. Custos. Despesas. Anúncios. Taxas. Prazos. Saldo no banco.</p>
-    <p style="margin-top:20px;">O Diagnóstico Financeiro transforma tudo isso em respostas.</p>
-    <p style="color:var(--branco); font-weight:600; margin-top:16px;">Como sua loja está.<br>O que merece atenção.<br>E por onde começar.</p>
-    <p class="lead" style="color:var(--branco); margin-top:20px;">Entregamos respostas, não planilhas.</p>
-    <div class="cta-area" style="margin-top:28px;">
-      <a href="contrato.html" class="btn btn-primario">Quero o meu Diagnóstico →</a>
-      <div class="legenda">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</div>
-      <div class="cta-meio" style="margin-top:18px;">
-        <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20Diagn%C3%B3stico%20Financeiro%20Finspots." target="_blank" rel="noopener" class="btn btn-secundario">Ainda tem dúvida? Fale no WhatsApp</a>
+  <div class="wrap-estreito wrap-foto wrap-larga">
+    <div class="foto-lado invertido larga final">
+      <figure class="foto"><img src="assets/img/diagnostico-bastidores.jpg" alt="Empreendedora sorridente refletindo em frente ao notebook, representando a clareza que o diagnóstico traz para os números do negócio" loading="lazy" style="object-position:74% 50%;"></figure>
+      <div class="foto-texto">
+        <h2>Você já tem os dados.</h2>
+        <p class="lead" style="color:var(--branco); margin-top:8px;">Agora precisa das respostas.</p>
+        <p style="margin-top:24px;">Seu e-commerce já gera números todos os dias.</p>
+        <p style="color:var(--branco); font-weight:600; margin-top:10px;">Faturamento. Vendas. Custos. Despesas. Anúncios. Taxas. Prazos. Saldo no banco.</p>
+        <p style="margin-top:20px;">O Diagnóstico Financeiro transforma tudo isso em respostas.</p>
+        <p style="color:var(--branco); font-weight:600; margin-top:16px;">Como sua loja está.<br>O que merece atenção.<br>E por onde começar.</p>
+        <p class="lead" style="color:var(--branco); margin-top:20px;">Entregamos respostas, não planilhas.</p>
+        <div class="cta-area" style="margin-top:28px;">
+          <a href="contrato.html" class="btn btn-primario">Quero o meu Diagnóstico →</a>
+          <div class="legenda">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</div>
+          <div class="cta-meio" style="margin-top:18px;">
+            <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20Diagn%C3%B3stico%20Financeiro%20Finspots." target="_blank" rel="noopener" class="btn btn-secundario">Ainda tem dúvida? Fale no WhatsApp</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
