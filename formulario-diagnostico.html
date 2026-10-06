@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário do Diagnóstico · Finspots</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/finspots-favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #04152e; --quase-preto: #00031B; --laranja: #FF5500; --laranja-fraco: rgba(255,85,0,0.13);
+    --branco: #FFFFFF; --suave: #D8E1F6; --fraco: #8F9AC8; --borda: rgba(255,255,255,0.12);
+    --campo: rgba(255,255,255,0.05); --erro: #FF8A8A; --ok: #07C480;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+         background-color: var(--azul);
+         color: var(--branco); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--laranja); outline-offset: 3px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 32px 16px 72px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 36px; }
+  header img { height: 34px; width: auto; }
+  header a { color: var(--fraco); font-size: 13px; text-decoration: none; text-align: right; }
+  h1 { font-size: clamp(26px, 5vw, 34px); line-height: 1.25; font-weight: 700; }
+  h1 span { color: var(--laranja); }
+  .intro { color: var(--suave); margin: 14px 0 10px; }
+  .pilulas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .pilula { font-size: 12.5px; border-radius: 999px; padding: 4px 12px; background: var(--laranja-fraco); color: var(--laranja); }
+  .pilula.cinza { background: rgba(255,255,255,.06); color: var(--suave); }
+
+  fieldset { border: 1px solid var(--borda); border-radius: 16px; padding: 24px 20px 8px; margin-top: 26px;
+             background: rgba(0,3,27,0.55); backdrop-filter: blur(4px); min-width: 0; }
+  legend { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; padding: 0 8px; }
+  legend .n { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--laranja); color: var(--laranja);
+              display: grid; place-items: center; font-size: 15px; flex: none; }
+  .nivel { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+           border-radius: 6px; padding: 2px 8px; margin-left: 4px; vertical-align: middle; }
+  .nivel.ess { background: var(--laranja); color: #fff; }
+  .nivel.comp { border: 1px solid var(--laranja); color: var(--laranja); }
+  .nivel.opc { border: 1px solid var(--borda); color: var(--fraco); }
+  .ajuda-sec { color: var(--fraco); font-size: 14px; margin: -2px 0 18px; }
+  .serve { color: var(--suave); font-size: 13px; background: rgba(255,255,255,.04); border-radius: 10px;
+           padding: 10px 12px; margin: 4px 0 18px; }
+  .serve b { color: var(--laranja); font-weight: 600; }
+
+  .campo { margin-bottom: 18px; }
+  .t { display: block; font-weight: 500; font-size: 15px; margin-bottom: 6px; }
+  .dica { display: block; color: var(--fraco); font-size: 13px; margin: -2px 0 8px; }
+  .opc { color: var(--fraco); font-weight: 400; font-size: 13px; }
+  input[type=text], input[type=email], input[type=tel], input[type=url], select, textarea {
+    width: 100%; font: inherit; font-size: 16px; color: var(--branco); background: var(--campo);
+    border: 1px solid var(--borda); border-radius: 10px; padding: 11px 13px; }
+  select option { color: #04152e; }
+  textarea { min-height: 110px; resize: vertical; }
+  input::placeholder, textarea::placeholder { color: #66709B; }
+  input:focus, select:focus, textarea:focus { border-color: var(--laranja); outline: none; }
+  input[readonly] { background: transparent; border-style: dashed; color: var(--suave); }
+  .rs { position: relative; }
+  .rs::before { content: "R$"; position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+                color: var(--fraco); font-size: 15px; pointer-events: none; }
+  .rs input { padding-left: 42px; }
+  .linha { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .linha3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .linha4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 600px) { .linha, .linha3 { grid-template-columns: 1fr; } .linha4 { grid-template-columns: 1fr 1fr; } }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips label { cursor: pointer; }
+  .chips input { position: absolute; opacity: 0; pointer-events: none; }
+  .chips span { display: inline-block; border: 1px solid var(--borda); border-radius: 999px; padding: 8px 15px;
+                font-size: 14px; color: var(--suave); transition: all .15s; }
+  .chips input:checked + span { border-color: var(--laranja); color: var(--branco); background: var(--laranja-fraco); }
+  .chips input:focus-visible + span { outline: 2px solid var(--laranja); outline-offset: 2px; }
+
+  .condicional { display: none; margin-top: 14px; }
+  .condicional.aberto { display: block; }
+  .recuo { padding-left: 14px; border-left: 2px solid var(--laranja-fraco); }
+
+  .arquivo { border: 1px dashed var(--borda); border-radius: 12px; padding: 13px; margin-bottom: 12px; }
+  .arquivo input { font: inherit; font-size: 14px; color: var(--suave); width: 100%; }
+  .arquivo input::file-selector-button { font: inherit; font-size: 14px; border: 1px solid var(--laranja);
+      background: transparent; color: var(--branco); border-radius: 8px; padding: 7px 14px; margin-right: 10px; cursor: pointer; }
+  .arquivo .t { margin-bottom: 2px; }
+  .tamanho { position: sticky; bottom: 10px; z-index: 5; display: none; margin-top: 18px; text-align: center; font-size: 13px;
+             background: rgba(0,3,27,.92); border: 1px solid var(--borda); border-radius: 999px; padding: 7px 14px; color: var(--suave); }
+  .tamanho.mostrar { display: block; }
+  .tamanho.alto { color: var(--erro); border-color: var(--erro); }
+
+  .abas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+  .abas button { font: inherit; font-size: 14px; background: transparent; color: var(--suave); border: 1px solid var(--borda);
+                 border-radius: 8px; padding: 7px 13px; cursor: pointer; width: auto; max-width: none; }
+  .abas button.ativa { border-color: var(--laranja); color: #fff; background: var(--laranja-fraco); }
+  .abas button .ok { color: var(--ok); margin-left: 4px; }
+  .painel-mes { display: none; } .painel-mes.ativo { display: block; }
+  .grupo { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--laranja); font-weight: 600;
+           margin: 6px 0 10px; }
+  .mini { font: inherit; font-size: 13px; background: transparent; color: var(--suave); border: 1px solid var(--borda);
+          border-radius: 8px; padding: 6px 12px; cursor: pointer; width: auto; max-width: none; margin-bottom: 14px; }
+  .mini:hover { border-color: var(--laranja); color: #fff; }
+  .bloco-canal { border: 1px solid var(--borda); border-radius: 12px; padding: 14px 14px 0; margin-bottom: 12px; }
+  .bloco-canal .nome { font-weight: 600; margin-bottom: 10px; }
+  .meses-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 600px) { .meses-grade { grid-template-columns: 1fr 1fr; } }
+  .sub { font-size: 13px; color: var(--suave); font-weight: 500; margin: 2px 0 8px; }
+  .chips.peq span { padding: 6px 12px; font-size: 13px; }
+  .nome-ev { margin-top: 8px; width: 100%; max-width: 460px; font-size: 14px; }
+  .mes-ev { border-bottom: 1px solid var(--borda); padding-bottom: 12px; margin-bottom: 12px; }
+  .mes-ev:last-child { border-bottom: none; }
+  .vazio { color: var(--fraco); font-size: 14px; font-style: italic; margin-bottom: 16px; }
+
+  .enviar { margin-top: 30px; text-align: center; }
+  .btn { font: inherit; font-weight: 600; font-size: 16px; background: var(--laranja); color: #fff; border: none;
+         border-radius: 10px; padding: 16px 40px; cursor: pointer; width: 100%; max-width: 360px; }
+  .btn:disabled { opacity: .6; cursor: wait; }
+  .lgpd { color: var(--fraco); font-size: 13px; margin-top: 14px; }
+  .lgpd a { color: var(--suave); }
+  .aviso-erro { color: var(--erro); font-size: 14px; margin-top: 12px; text-align: left; }
+  .aviso-erro ul { margin: 6px 0 0 18px; }
+  .escondido { position: absolute; left: -9999px; }
+  .linha > .campo, .linha3 > .campo, .linha4 > .campo { display: flex; flex-direction: column; justify-content: flex-end; }
+  .proximo { display: flex; justify-content: flex-end; margin: -4px 0 12px; }
+  @media (max-width: 480px) { legend { font-size: 16px; gap: 10px; flex-wrap: wrap; } fieldset { padding: 20px 14px 6px; } }
+  .salvo { display: none; font-size: 13px; color: var(--ok); margin-top: 12px; }
+  .salvo.mostrar { display: block; }
+  .salvo a { color: var(--fraco); margin-left: 6px; }
+  .salvo small { display: block; color: var(--fraco); font-size: 12px; margin-top: 2px; }
+
+
+  /* ---------- tela de "enviando" */
+  .carregando { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center;
+    padding: 16px; background: rgba(0,3,27,.82); backdrop-filter: blur(4px); }
+  .carregando.mostrar { display: flex; animation: aparece .25s ease-out; }
+  .carregando .caixa { max-width: 380px; width: 100%; text-align: center; background: var(--azul); border: 1px solid var(--borda);
+    border-radius: 18px; padding: 28px 24px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.45); }
+  .carregando .titulo { font-size: 17px; font-weight: 600; color: var(--branco); margin: 0 0 18px; }
+  .carregando .barra { height: 6px; border-radius: 999px; background: var(--campo); overflow: hidden; margin-bottom: 14px; }
+  .carregando .barra span { display: block; height: 100%; width: 40%; border-radius: 999px; background: var(--laranja);
+    animation: corre 1.8s ease-in-out infinite; }
+  .carregando small { display: block; font-size: 12.5px; color: var(--fraco); }
+  @keyframes corre { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+  @keyframes aparece { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .carregando .barra span { animation-duration: 3s; }
+  }
+  #bg-fundo { position: fixed; inset: 0; z-index: -1; pointer-events: none;
+              background: var(--azul) url('assets/img/fundo-gradiente.png') center / cover no-repeat; }
+</style>
+</head>
+<body>
+<div id="bg-fundo" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <img src="assets/img/finspots-logo.png" alt="Finspots">
+    <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
+  </header>
+
+  <h1>Vamos começar o seu <span>diagnóstico</span></h1>
+  <p class="intro">Responda com calma e do seu jeito. Tem relatório pronto do sistema? É só anexar. Prefere digitar? Preencha os campos. O que você não tiver, pode deixar em branco.</p>
+  <div class="pilulas">
+    <span class="pilula">Essencial: dados da loja, período, regime, resultado e vendas</span>
+    <span class="pilula cinza">O restante é opcional</span>
+  </div>
+
+  <p class="salvo" id="salvo"><span></span><a href="#" id="apagar-salvo">Começar de novo</a>
+    <small>Pode fechar e voltar depois. Só os arquivos anexados precisam ser escolhidos de novo.</small></p>
+
+  <!-- ⚠️ Troque SEU_EMAIL_AQUI pelo e-mail (ou pelo código) do seu FormSubmit -->
+  <form id="form" action="#" method="POST" enctype="multipart/form-data" novalidate>
+    <input type="hidden" name="_subject" id="assunto" value="Novo diagnóstico">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://finspots.com.br/obrigado.html">
+    <input type="text" name="_honey" class="escondido" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <input type="hidden" name="Formulário" value="Diagnóstico">
+    <input type="hidden" name="Período analisado" id="h-periodo">
+    <input type="hidden" name="Principais canais de venda" id="h-canais">
+    <input type="hidden" name="Quantidade de canais" id="h-canais-qtd">
+    <input type="hidden" name="O que aconteceu no período" id="h-eventos">
+
+    <!-- 1 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">1</span>Dados do negócio <span class="nivel ess">Essencial</span></legend>
+      <div class="linha">
+        <div class="campo"><label class="t" for="loja">Nome da loja</label>
+          <input type="text" id="loja" name="Nome da loja" required></div>
+        <div class="campo"><label class="t" for="empresa">Nome da empresa <span class="opc">(razão social, se for diferente)</span></label>
+          <input type="text" id="empresa" name="Nome da empresa" autocomplete="organization"></div>
+      </div>
+      <div class="linha">
+        <div class="campo"><label class="t" for="resp">Responsável</label>
+          <input type="text" id="resp" name="Responsável" required autocomplete="name"></div>
+        <div class="campo"><label class="t" for="zap">WhatsApp</label>
+          <input type="tel" id="zap" name="WhatsApp" required inputmode="tel" placeholder="(00) 9 0000-0000" autocomplete="tel"></div>
+      </div>
+      <div class="linha">
+        <div class="campo"><label class="t" for="email">E-mail</label>
+          <input type="email" id="email" name="email" required autocomplete="email"></div>
+        <div class="campo"><label class="t" for="site">Site <span class="opc">(se tiver)</span></label>
+          <input type="url" id="site" name="Site" placeholder="www.sualoja.com.br" inputmode="url"></div>
+      </div>
+      <div class="linha">
+        <div class="campo"><label class="t" for="seg">Segmento</label>
+          <input type="text" id="seg" name="Segmento" placeholder="ex.: moda feminina, velas e aromas, eletrônicos"></div>
+        <div class="campo"><label class="t" for="inicio">Desde quando a loja vende?</label>
+          <input type="text" id="inicio" name="Data de início" placeholder="mês/ano, ex.: 03/2021"></div>
+      </div>
+      <div class="campo">
+        <span class="t">Principais canais de venda</span>
+        <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro" data-max="3">
+          <label><input type="checkbox" value="Mercado Livre"><span>Mercado Livre</span></label>
+          <label><input type="checkbox" value="Shopee"><span>Shopee</span></label>
+          <label><input type="checkbox" value="Amazon"><span>Amazon</span></label>
+          <label><input type="checkbox" value="Magalu"><span>Magalu</span></label>
+          <label><input type="checkbox" value="Shein"><span>Shein</span></label>
+          <label><input type="checkbox" value="TikTok Shop"><span>TikTok Shop</span></label>
+          <label><input type="checkbox" value="Site próprio"><span>Site próprio</span></label>
+          <label><input type="checkbox" value="Instagram / WhatsApp"><span>Instagram / WhatsApp</span></label>
+          <label><input type="checkbox" value="Loja física"><span>Loja física</span></label>
+        </div>
+        <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui" style="margin-top:10px" data-sempre>
+        <span class="dica" id="canais-limite" style="margin-top:8px">O Diagnóstico analisa até 3 canais de venda. Sua loja vende em mais de 3? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%203%20canais%20e%20quero%20um%20or%C3%A7amento%20do%20Diagn%C3%B3stico%20Financeiro." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a> para um orçamento.</span>
+      </div>
+
+      <div class="campo">
+        <span class="t">Período para analisar</span>
+        <span class="dica">De 3 a 6 meses fechados. Os meses que você escolher aqui aparecem nas próximas perguntas.</span>
+        <div class="linha4">
+          <select id="ini-mes" aria-label="Mês inicial"></select><select id="ini-ano" aria-label="Ano inicial"></select>
+          <select id="fim-mes" aria-label="Mês final"></select><select id="fim-ano" aria-label="Ano final"></select>
+        </div>
+        <span class="dica" id="periodo-txt" style="margin-top:8px"></span>
+      </div>
+
+      <div class="campo">
+        <span class="t">Regime tributário</span>
+        <div class="chips">
+          <label><input type="radio" name="Regime tributário" value="MEI" data-abre="c-das" data-fecha="c-aliq"><span>MEI</span></label>
+          <label><input type="radio" name="Regime tributário" value="Simples Nacional" data-abre="c-aliq" data-fecha="c-das"><span>Simples Nacional</span></label>
+          <label><input type="radio" name="Regime tributário" value="Lucro Presumido" data-abre="c-aliq" data-fecha="c-das"><span>Lucro Presumido</span></label>
+        </div>
+        <div class="condicional" id="c-aliq">
+          <label class="t" for="aliq">Alíquota de imposto <span class="opc">(se souber)</span></label>
+          <span class="dica">A porcentagem que você paga sobre as vendas. Está na guia do DAS ou com o contador.</span>
+          <input type="text" id="aliq" name="Alíquota de imposto (se souber)" inputmode="decimal" placeholder="ex.: 6%">
+        </div>
+        <div class="condicional" id="c-das">
+          <label class="t" for="das">Valor do DAS por mês</label>
+          <span class="dica">O boleto mensal do MEI.</span>
+          <div class="rs"><input type="text" id="das" name="Valor do DAS por mês" inputmode="decimal" placeholder="ex.: 81,05"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 2 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">2</span>Resultado financeiro <span class="nivel ess">Essencial</span></legend>
+            <div class="campo">
+        <span class="t">Como prefere mandar?</span>
+        <div class="chips">
+          <label><input type="radio" name="grp-fin" value="arquivo" data-abre="fin-arq" data-fecha="fin-mao" checked><span>Tenho DRE ou planilha financeira</span></label>
+          <label><input type="radio" name="grp-fin" value="mao" data-abre="fin-mao" data-fecha="fin-arq"><span>Prefiro preencher aqui</span></label>
+        </div>
+      </div>
+      <div class="condicional" id="fin-arq">
+        <div class="arquivo"><label class="t" for="f-dre">DRE ou planilha financeira do período</label>
+          <span class="dica">PDF, Excel ou CSV. Pode ser do contador, do sistema ou a planilha que você usa.</span>
+          <input type="file" id="f-dre" name="DRE" multiple accept=".pdf,.xlsx,.xls,.csv,.ods,.png,.jpg,.jpeg"></div>
+      </div>
+      <div class="condicional" id="fin-mao">
+        <span class="dica">Um mês de cada vez. Valores do mês, mais ou menos como foram. Deixe em branco o que não tem.</span>
+        <div class="abas" id="abas-fin" role="tablist"></div>
+        <div id="paineis-fin"></div>
+      </div>
+    </fieldset>
+
+    <!-- 3 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">3</span>Vendas <span class="nivel ess">Essencial</span></legend>
+      <div class="campo">
+        <span class="t">Como prefere mandar?</span>
+        <div class="chips">
+          <label><input type="radio" name="grp-ven" value="arquivo" data-abre="ven-arq" data-fecha="ven-mao" checked><span>Tenho o relatório de vendas</span></label>
+          <label><input type="radio" name="grp-ven" value="mao" data-abre="ven-mao" data-fecha="ven-arq"><span>Prefiro preencher aqui</span></label>
+        </div>
+      </div>
+      <div class="condicional" id="ven-arq">
+        <div class="arquivo"><label class="t" for="f-vendas">Relatório de vendas de cada canal</label>
+          <span class="dica">Do jeito que o sistema exporta, sem arrumar. Mercado Livre: Vendas › Exportar · Shopee: Meus pedidos › Exportar · site: relatório de pedidos.</span>
+          <input type="file" id="f-vendas" name="Vendas" multiple accept=".csv,.xlsx,.xls,.ods"></div>
+      </div>
+      <div class="condicional" id="ven-mao">
+        <span class="dica">Faturamento e devoluções você já informou no resultado financeiro. Aqui, só o que falta de cada mês.</span>
+        <div id="grade-vendas"></div>
+      </div>
+
+      <div class="campo" style="margin-top:8px">
+        <span class="t">Números por canal <span class="opc">(se tiver; total do período)</span></span>
+        <span class="dica">Os canais marcados na parte 1 aparecem aqui.</span>
+        <div id="canais-detalhe"><p class="vazio">Marque os canais na parte 1.</p></div>
+      </div>
+    </fieldset>
+
+    <!-- 4 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">4</span>Produtos <span class="nivel opc">Opcional</span></legend>
+            <div class="arquivo"><label class="t" for="f-prod">Relatório por produto <span class="opc">(de preferência)</span></label>
+        <span class="dica">Com quantidade e receita de cada produto no período.</span>
+        <input type="file" id="f-prod" name="Produtos" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
+      <div class="arquivo"><label class="t" for="f-cat">Lista de produtos com o custo de cada um</label>
+        <span class="dica">SKU ou nome, quanto você paga por unidade e, se tiver, o estoque.</span>
+        <input type="file" id="f-cat" name="Custos dos produtos" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
+    </fieldset>
+
+    <!-- 5 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">5</span>Marketing <span class="nivel opc">Opcional</span></legend>
+            <div class="campo">
+        <span class="t">Investe em anúncios?</span>
+        <div class="chips">
+          <label><input type="radio" name="grp-mkt" value="sim" data-abre="mkt"><span>Sim</span></label>
+          <label><input type="radio" name="grp-mkt" value="nao" data-fecha="mkt" checked><span>Não</span></label>
+        </div>
+      </div>
+      <div class="condicional" id="mkt">
+        <div class="arquivo"><label class="t" for="f-ads">Relatórios de anúncios</label>
+          <span class="dica">Planilha ou print de cada plataforma mostrando investimento e vendas do período.</span>
+          <input type="file" id="f-ads" name="Anuncios" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg"></div>
+        <span class="t" style="margin-top:6px">Ou preencha mês a mês <span class="opc">(o que souber)</span></span>
+        <span class="dica">Escolha onde você anuncia. Não sabe o valor de cada mês? Preencha só o total do período.</span>
+        <div class="chips" id="plataformas" data-junta="h-plataformas">
+          <label><input type="checkbox" value="Meta Ads"><span>Meta Ads</span></label>
+          <label><input type="checkbox" value="Google Ads"><span>Google Ads</span></label>
+          <label><input type="checkbox" value="Marketplace Ads"><span>Marketplace Ads (Mercado Ads, Shopee Ads…)</span></label>
+          <label><input type="checkbox" value="Outro"><span>Outro</span></label>
+        </div>
+        <input type="hidden" id="h-plataformas">
+        <div id="grade-mkt" style="margin-top:14px"></div>
+      </div>
+    </fieldset>
+
+    <!-- 6 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">6</span>Clientes <span class="nivel opc">Opcional</span></legend>
+      <p class="ajuda-sec">Se o relatório de vendas já mostra quem comprou, pode pular esta parte.</p>
+      <div class="arquivo"><label class="t" for="f-cli">Relatório de clientes <span class="opc">(se tiver)</span></label>
+        <input type="file" id="f-cli" name="Clientes" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
+      <span class="t">Ou o que souber do período</span>
+      <div class="linha">
+        <div class="campo"><label class="dica" for="c-novos">Clientes novos</label><input type="text" id="c-novos" name="Clientes novos no período" inputmode="numeric"></div>
+        <div class="campo"><label class="dica" for="c-rec">Clientes que voltaram a comprar</label><input type="text" id="c-rec" name="Clientes recorrentes no período" inputmode="numeric"></div>
+      </div>
+      <div class="linha">
+        <div class="campo"><label class="dica" for="c-ped">Pedidos por cliente, em média</label><input type="text" id="c-ped" name="Pedidos por cliente" inputmode="decimal" placeholder="ex.: 1,3"></div>
+        <div class="campo"><label class="dica" for="c-freq">Quantas vezes por ano um cliente compra</label><input type="text" id="c-freq" name="Quantas vezes por ano um cliente costuma voltar a comprar?" placeholder="ex.: 2x por ano"></div>
+      </div>
+      <div class="linha">
+        <div class="campo"><label class="dica" for="c-int">Tempo entre uma compra e outra</label><input type="text" id="c-int" name="Tempo entre compras" placeholder="ex.: 45 dias"></div>
+        <div class="campo"><label class="dica" for="c-val">Quanto cada cliente gasta, em média</label><div class="rs"><input type="text" id="c-val" name="Receita por cliente" inputmode="decimal"></div></div>
+      </div>
+    </fieldset>
+
+    <!-- 7 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">7</span>Caixa <span class="nivel opc">Opcional</span></legend>
+      <p class="ajuda-sec">Pode mandar em OFX, CSV, PDF ou Excel.</p>
+      <div class="arquivo"><label class="t" for="f-ext">Extratos bancários do período</label>
+        <span class="dica">OFX é o melhor. De todas as contas da loja.</span>
+        <input type="file" id="f-ext" name="Extratos" multiple accept=".ofx,.csv,.xlsx,.xls,.pdf"></div>
+      <div class="arquivo"><label class="t" for="f-cart">Extratos de carteiras e contas de recebimento</label>
+        <span class="dica">Mercado Pago, PagBank, Stone, gateway do site…</span>
+        <input type="file" id="f-cart" name="Extratos de carteiras" multiple accept=".ofx,.csv,.xlsx,.xls,.pdf"></div>
+      <div class="arquivo"><label class="t" for="f-comp">Complementos <span class="opc">(o que tiver)</span></label>
+        <span class="dica">Contas a receber, repasses a liberar, parcelamentos, contas a pagar, fornecedores, impostos, compromissos futuros.</span>
+        <input type="file" id="f-comp" name="Complementos de caixa" multiple accept=".ofx,.csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg"></div>
+      <div class="linha">
+        <div class="campo"><label class="t" for="pmr">Em quantos dias o dinheiro das vendas cai na conta?</label>
+          <input type="text" id="pmr" name="Em quantos dias o dinheiro das vendas cai na sua conta?" placeholder="ex.: 14 dias"></div>
+        <div class="campo"><label class="t" for="futuro">Compromissos futuros importantes</label>
+          <input type="text" id="futuro" name="Compromissos futuros" placeholder="ex.: parcela de R$ 2 mil até dez/26"></div>
+      </div>
+    </fieldset>
+
+    <!-- 8 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">8</span>Fornecedores <span class="nivel opc">Opcional</span></legend>
+      <div class="arquivo"><label class="t" for="f-forn">Relação de fornecedores ou relatório de compras <span class="opc">(se tiver)</span></label>
+        <input type="file" id="f-forn" name="Compras" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
+      <span class="t">Ou os principais <span class="opc">(até 3)</span></span>
+      <div id="grade-forn"></div>
+    </fieldset>
+
+    <!-- 9 ---------------------------------------------------------------->
+    <fieldset>
+      <legend><span class="n">9</span>Contexto da operação <span class="nivel opc">Opcional</span></legend>
+      <div class="campo">
+        <span class="t">Aconteceu alguma coisa que possa ter influenciado os resultados?</span>
+        <span class="dica">Marque em cada mês o que aconteceu. Se quiser, dê um nome curto ao acontecimento: ele aparece no seu relatório, ao lado do mês, para você lembrar o que foi.</span>
+        <div id="grade-eventos"></div>
+      </div>
+      <div class="campo"><label class="t" for="ctx">Conte o que aconteceu <span class="opc">(e quando)</span></label>
+        <textarea id="ctx" name="Contexto da operação" placeholder="ex.: Em julho fiz uma promoção de 20% no Mercado Livre e faltou o produto mais vendido por duas semanas."></textarea></div>
+      <div class="campo"><label class="t" for="duv">Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?</label>
+        <span class="dica">Vamos responder isso no seu relatório.</span>
+        <textarea id="duv" name="Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?"
+                  placeholder="ex.: Consigo aumentar meu pró-labore? Por que vendo bem e nunca sobra dinheiro?"></textarea></div>
+    </fieldset>
+
+    <p class="tamanho" id="tamanho"></p>
+    <div class="enviar">
+      <button type="submit" class="btn" id="btn">Enviar para a Finspots</button>
+      <div class="aviso-erro" id="erro" role="alert"></div>
+      <p class="lgpd">Seus dados são usados só para o seu diagnóstico. Veja a <a href="privacidade.html">Política de Privacidade</a>.</p>
+    </div>
+  </form>
+</div>
+
+<script>
+(function () {
+  var F = window.F = {};
+  F.MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+  F.curto = function (m, a) { return F.MESES[m].slice(0, 3) + "/" + a; };
+  F.$ = function (s, el) { return (el || document).querySelector(s); };
+  F.$$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+
+  // ---------- Sim/Não e "enviar arquivo / preencher aqui": abre um bloco, fecha outro (fechado = não vai no e-mail)
+  function campos(box) { return F.$$("input, select, textarea, button.mini", box); }
+  function ajustar(id, abrir) {
+    var box = document.getElementById(id);
+    if (!box) return;
+    box.classList.toggle("aberto", abrir);
+    campos(box).forEach(function (c) { if (!c.hasAttribute("data-sempre")) c.disabled = !abrir; });
+  }
+  F.sincronizar = function () {
+    F.$$("input[type=radio][data-abre], input[type=radio][data-fecha]").forEach(function (r) {
+      if (!r.checked || r.disabled) return;
+      (r.dataset.fecha || "").split(" ").filter(Boolean).forEach(function (id) { ajustar(id, false); });
+      (r.dataset.abre || "").split(" ").filter(Boolean).forEach(function (id) { ajustar(id, true); });
+    });
+  };
+  document.addEventListener("change", function (e) {
+    if (e.target.matches("input[type=radio][data-abre], input[type=radio][data-fecha]")) F.sincronizar();
+  });
+
+  // ---------- várias escolhas viram um texto só ("Mercado Livre, Shopee")
+  F.juntar = function () {
+    F.$$("[data-junta]").forEach(function (box) {
+      var alvo = document.getElementById(box.dataset.junta);
+      var marcados = F.$$("input:checked", box).map(function (c) { return c.value; });
+      var outro = box.dataset.outro && document.getElementById(box.dataset.outro);
+      // o campo "outros" aceita vários nomes, separados por vírgula ou ponto e vírgula; nome repetido entra uma vez só
+      if (outro) outro.value.split(/[,;]/).forEach(function (n) {
+        n = n.trim().replace(/\s+/g, " ");
+        if (n && marcados.map(function (m) { return m.toLowerCase(); }).indexOf(n.toLowerCase()) < 0) marcados.push(n);
+      });
+      alvo.value = marcados.join(", ");
+      var qtd = document.getElementById(box.dataset.junta + "-qtd");
+      if (qtd) qtd.value = marcados.length || "";
+    });
+  };
+
+  // ---------- anexos: FormSubmit aceita até 10 MB no total
+  var LIMITE = 10 * 1024 * 1024;
+  F.totalArquivos = function () {
+    var t = 0, n = 0;
+    F.$$("input[type=file]").forEach(function (i) {
+      if (i.disabled) return;
+      Array.prototype.forEach.call(i.files, function (f) { t += f.size; n++; });
+    });
+    return { bytes: t, n: n };
+  };
+  F.mostrarTamanho = function () {
+    var t = F.totalArquivos(), el = F.$("#tamanho");
+    el.classList.toggle("mostrar", t.n > 0);
+    el.textContent = t.n + " arquivo(s) · " + (t.bytes / 1048576).toFixed(1).replace(".", ",") + " MB de 10 MB";
+    el.classList.toggle("alto", t.bytes > LIMITE);
+  };
+  document.addEventListener("change", function (e) { if (e.target.type === "file") F.mostrarTamanho(); });
+
+  // ---------- números digitados em reais ("1.234,56", "1234.5", "1,2 mil")
+  F.num = function (v) {
+    if (v == null) return null;
+    var s = String(v).toLowerCase().replace(/r\$|\s/g, "");
+    if (!s) return null;
+    var mil = /mil$/.test(s); s = s.replace(/mil$/, "");
+    if (s.indexOf(",") >= 0) s = s.replace(/\./g, "").replace(",", ".");
+    else if (/^\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, "");
+    var n = parseFloat(s);
+    return isNaN(n) ? null : n * (mil ? 1000 : 1);
+  };
+  F.brl = function (n) {
+    return n.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+  F.preenchido = function (el) { return el && !el.disabled && el.value.trim() !== ""; };
+  F.temArquivo = function (sel) { return F.$$(sel).some(function (i) { return !i.disabled && i.files.length > 0; }); };
+
+  // ---------- envio
+  F.aoEnviar = function (validar, antes) {
+    F.$("#form").addEventListener("submit", function (e) {
+      F.juntar();
+      if (antes) antes();
+      var erros = validar(), box = F.$("#erro");
+      box.innerHTML = "";
+      if (F.totalArquivos().bytes > LIMITE) erros.push("Os arquivos passaram de 10 MB. Tire algum e mande pelo WhatsApp.");
+      if (erros.length) {
+        e.preventDefault();
+        box.innerHTML = "Falta pouco:<ul>" + erros.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>";
+        return;
+      }
+      // o e-mail só leva o que foi respondido
+      F.$$('input[name^="grp-"]').forEach(function (r) { r.disabled = true; });
+      F.$$("input[type=text], input[type=email], input[type=tel], input[type=url], select, textarea", this).forEach(function (c) {
+        if (!c.name || c.name.charAt(0) === "_") return;
+        if (!c.value.trim()) c.disabled = true;
+      });
+      F.$$("input[type=file]", this).forEach(function (i) { if (!i.files.length) i.disabled = true; });
+      F.$$("input[type=checkbox]:not([name])", this).forEach(function (c) { c.disabled = true; });
+      var b = F.$("#btn"); b.disabled = true; b.textContent = "Enviando…";
+      e.preventDefault();
+      F.enviar(this, b, box);
+    });
+  };
+
+  // ---------- envio para o Google (Apps Script): respostas na planilha, anexos no Drive, aviso por e-mail
+  F.ENDPOINT = "https://script.google.com/macros/s/AKfycbyIjo86B3ZhrhUD2ViWpwalKcQS2ayoFez2tldKtpSfTJmV8Yazib6NxAJRjaaze5R6/exec";
+  function base64(file) {
+    return new Promise(function (ok, erro) {
+      var r = new FileReader();
+      r.onload = function () { ok(String(r.result).split(",")[1] || ""); };
+      r.onerror = function () { erro(r.error); };
+      r.readAsDataURL(file);
+    });
+  }
+  // tela de "enviando": só uma barra correndo, para não parecer travado
+  F.carregando = function () {
+    var el = F.$("#carregando");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "carregando"; el.className = "carregando";
+      el.setAttribute("role", "status"); el.setAttribute("aria-live", "polite");
+      el.innerHTML = '<div class="caixa"><p class="titulo">Enviando suas informações…</p>'
+        + '<div class="barra"><span></span></div>'
+        + '<small>Pode levar até 1 minuto. Não feche nem atualize esta página.</small></div>';
+      document.body.appendChild(el);
+    }
+    el.classList.add("mostrar");
+    return { fechar: function () { el.classList.remove("mostrar"); } };
+  };
+
+  F.enviar = function (form, b, box) {
+    var campos = [], esperas = [];
+    new FormData(form).forEach(function (v, k) {
+      if (v instanceof File) {
+        if (!v.name || !v.size) return;
+        esperas.push(base64(v).then(function (d) { return { campo: k, nome: v.name, tipo: v.type, base64: d }; }));
+      } else campos.push([k, v]);
+    });
+    var proximo = (F.$('input[name="_next"]', form) || {}).value || "obrigado.html";
+    var tela = F.carregando();
+    Promise.all(esperas).then(function (arquivos) {
+      return fetch(F.ENDPOINT, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                                 body: JSON.stringify({ campos: campos, arquivos: arquivos }) });
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j || !j.ok) throw new Error((j && j.erro) || "falha no envio");
+      if (F.limparSalvo) F.limparSalvo();
+      location.href = proximo;
+    }).catch(function () {
+      tela.fechar();
+      F.$$("input, select, textarea", form).forEach(function (c) { if (!c.readOnly) c.disabled = false; });
+      F.sincronizar();
+      b.disabled = false; b.textContent = "Enviar para a Finspots";
+      box.innerHTML = "Não conseguimos enviar agora. Suas respostas continuam salvas neste aparelho: tente de novo em alguns minutos"
+        + " ou <a href=\"https://wa.me/5562996653913?text=Oi!%20Tive%20um%20problema%20para%20enviar%20o%20formul%C3%A1rio.\">chame no WhatsApp</a>.";
+    });
+  };
+
+  document.addEventListener("DOMContentLoaded", function () { F.sincronizar(); });
+})();
+// voltar do "obrigado" com o botão do navegador: recarrega para não ficar com campos travados
+window.addEventListener("pageshow", function (e) { if (e.persisted) location.reload(); });
+
+// ---------- salvar o preenchimento neste aparelho (volta onde parou, mesmo fechando a página)
+(function () {
+  var F = window.F;
+  function chaveDe(el) {
+    if (el.type === "file" || el.type === "hidden" || el.readOnly) return null;
+    if (el.type === "radio") return el.name ? "r:" + el.name : null;
+    if (el.type === "checkbox") { var box = el.closest("[data-junta]"); return box ? "c:" + box.dataset.junta + ":" + el.value : null; }
+    if (el.name && el.name.charAt(0) !== "_") return "n:" + el.name;
+    if (el.id) return "i:" + el.id;
+    return null;
+  }
+  function ler(k) { try { return JSON.parse(localStorage.getItem(k) || "{}"); } catch (e) { return {}; } }
+  function gravar(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  function aplicar(dados) {
+    F.$$("#form input, #form select, #form textarea").forEach(function (el) {
+      var k = chaveDe(el); if (!k || !(k in dados)) return;
+      if (el.type === "radio") el.checked = dados[k] === el.value;
+      else if (el.type === "checkbox") el.checked = !!dados[k];
+      else el.value = dados[k];
+    });
+  }
+  F.autosalvar = function (chave, reconstruir) {
+    var dados = ler(chave), aviso = F.$("#salvo"), tem = Object.keys(dados).length > 0;
+    if (tem) {
+      aplicar(dados);                       // campos fixos, período, canais, escolhas
+      if (reconstruir) reconstruir();       // monta os campos que dependem deles (meses, canais)
+      aplicar(dados);                       // e preenche esses também
+      F.sincronizar();
+      F.$$("#form input").forEach(function (el) { if (el.name && el.value) { el.dispatchEvent(new Event("input", { bubbles: true })); } });
+    }
+    function mostrar(txt) { if (aviso) { aviso.firstChild.textContent = txt; aviso.classList.add("mostrar"); } }
+    if (tem) mostrar("✓ Continuamos de onde você parou. ");
+    var t = null;
+    function salvar() {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        var d = {};
+        F.$$("#form input, #form select, #form textarea").forEach(function (el) {
+          var k = chaveDe(el); if (!k) return;
+          if (el.type === "radio") { if (el.checked) d[k] = el.value; }
+          else if (el.type === "checkbox") { if (el.checked) d[k] = true; }
+          else if (el.value.trim()) d[k] = el.value;
+        });
+        if (gravar(chave, d)) mostrar("✓ Suas respostas estão salvas neste aparelho. ");
+      }, 400);
+    }
+    F.$("#form").addEventListener("input", salvar);
+    F.$("#form").addEventListener("change", salvar);
+    F.$("#form").addEventListener("click", function (e) { if (e.target.closest("button.mini")) salvar(); });
+    var apagar = F.$("#apagar-salvo");
+    if (apagar) apagar.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (!confirm("Apagar tudo o que você preencheu e começar de novo?")) return;
+      try { localStorage.removeItem(chave); } catch (x) {}
+      location.reload();
+    });
+    F.limparSalvo = function () { try { localStorage.removeItem(chave); } catch (x) {} };
+  };
+})();
+
+</script>
+<script>
+(function () {
+  var $ = F.$, $$ = F.$$;
+  var ITENS_FIN = [
+    ["Faturamento", [["Faturamento bruto", "tudo o que vendeu, antes de descontos e devoluções"],
+                     ["Devoluções e cancelamentos", ""], ["Receita líquida", "calculada: faturamento menos devoluções"]]],
+    ["Custos de cada venda", [["CMV (custo dos produtos vendidos)", "quanto custaram os produtos que saíram"],
+                              ["Taxas de marketplace e pagamento", "comissões, tarifas, taxa do cartão ou gateway"],
+                              ["Fretes", "o que você pagou de frete"], ["Embalagens", ""], ["Impostos", "DAS ou impostos sobre a venda"]]],
+    ["Despesas da loja", [["Folha", "salários, encargos e benefícios"], ["Pró-labore", "quanto você tirou para você"],
+                          ["Aluguel", ""], ["Sistemas", "ERP, plataforma, ferramentas"], ["Contabilidade", ""],
+                          ["Despesas administrativas e operacionais", "internet, luz, telefone, outras"]]]
+  ];
+  var FIXOS = ["Folha", "Pró-labore", "Aluguel", "Sistemas", "Contabilidade", "Despesas administrativas e operacionais"];
+  var ITENS_VEN = [["Pedidos", "numeric"], ["Unidades vendidas", "numeric"], ["Ticket médio", "rs"]];
+
+  // ---------- período (3 a 6 meses)
+  var hoje = new Date(), fim = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1), ini = new Date(fim.getFullYear(), fim.getMonth() - 2, 1);
+  var anos = [hoje.getFullYear() - 2, hoje.getFullYear() - 1, hoje.getFullYear()];
+  function opcoes(sel, lista, valor) {
+    lista.forEach(function (t, i) { var o = document.createElement("option"); o.value = typeof t === "number" ? t : i;
+      o.textContent = t; if (o.value == valor) o.selected = true; sel.appendChild(o); });
+  }
+  opcoes($("#ini-mes"), F.MESES, ini.getMonth()); opcoes($("#ini-ano"), anos, ini.getFullYear());
+  opcoes($("#fim-mes"), F.MESES, fim.getMonth()); opcoes($("#fim-ano"), anos, fim.getFullYear());
+  function meses() {
+    var a = +$("#ini-ano").value, m = +$("#ini-mes").value, af = +$("#fim-ano").value, mf = +$("#fim-mes").value, out = [];
+    while ((a < af || (a === af && m <= mf)) && out.length < 13) { out.push([m, a]); m++; if (m > 11) { m = 0; a++; } }
+    return out;
+  }
+  function periodoOk() { var n = meses().length; return n >= 3 && n <= 6; }
+
+  // ---------- campos por mês (mantém o que já foi digitado quando o período muda)
+  function guardar(box) { var v = {}; $$("input", box).forEach(function (i) { if (i.name) v[i.name] = i.value; }); return v; }
+  function campoValor(nome, dica, tipo, valor, extra) {
+    var id = "c" + Math.random().toString(36).slice(2, 9);
+    var inp = '<input type="text" id="' + id + '" name="' + nome + '" inputmode="' + (tipo === "numeric" ? "numeric" : "decimal") + '"'
+            + (valor ? ' value="' + valor.replace(/"/g, "&quot;") + '"' : "") + (extra || "") + ">";
+    return '<div class="campo"><label class="dica" for="' + id + '" style="margin:0 0 4px">' + nome.split(" · ").pop()
+         + (dica ? ' <span class="opc">· ' + dica + '</span>' : "") + '</label>'
+         + (tipo === "numeric" ? inp : '<div class="rs">' + inp + '</div>') + '</div>';
+  }
+  function montarFinanceiro() {
+    var box = $("#paineis-fin"), abas = $("#abas-fin"), antes = guardar(box), ms = meses();
+    var ativa = (abas.querySelector(".ativa") || {}).dataset;
+    box.innerHTML = ""; abas.innerHTML = "";
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    ms.forEach(function (mm, k) {
+      var rot = F.curto(mm[0], mm[1]);
+      var b = document.createElement("button"); b.type = "button"; b.textContent = rot; b.dataset.k = k; b.setAttribute("role", "tab");
+      abas.appendChild(b);
+      var p = document.createElement("div"); p.className = "painel-mes"; p.dataset.k = k;
+      var html = "";
+      if (k > 0) html += '<button type="button" class="mini" data-copiar="' + k + '">Repetir as despesas de ' + F.curto(ms[k - 1][0], ms[k - 1][1]) + '</button>';
+      ITENS_FIN.forEach(function (g) {
+        html += '<div class="grupo">' + g[0] + '</div><div class="linha">';
+        g[1].forEach(function (it) {
+          var nome = rot + " · " + it[0];
+          html += campoValor(nome, it[1], "rs", antes[nome] || "", it[0] === "Receita líquida" ? " readonly tabindex=\"-1\"" : "");
+        });
+        html += "</div>";
+      });
+      if (k < ms.length - 1) html += '<div class="proximo"><button type="button" class="mini" data-ir="' + (k + 1) + '">Próximo: ' + F.curto(ms[k + 1][0], ms[k + 1][1]) + ' →</button></div>';
+      p.innerHTML = html; box.appendChild(p);
+    });
+    mostrarAba(ativa && ativa.k < ms.length ? +ativa.k : 0);
+    marcarAbas();
+  }
+  function mostrarAba(k) {
+    $$("#abas-fin button").forEach(function (b) { b.classList.toggle("ativa", +b.dataset.k === k); b.setAttribute("aria-selected", +b.dataset.k === k); });
+    $$("#paineis-fin .painel-mes").forEach(function (p) { p.classList.toggle("ativo", +p.dataset.k === k); });
+  }
+  function marcarAbas() {
+    $$("#paineis-fin .painel-mes").forEach(function (p) {
+      var fat = p.querySelector('input[name$="· Faturamento bruto"]'), b = $('#abas-fin button[data-k="' + p.dataset.k + '"]');
+      b.innerHTML = b.textContent.replace("✓", "").trim() + (fat && fat.value.trim() ? '<span class="ok">✓</span>' : "");
+      var dev = p.querySelector('input[name$="· Devoluções e cancelamentos"]'), liq = p.querySelector('input[name$="· Receita líquida"]');
+      var f = F.num(fat.value), d = F.num(dev.value) || 0;
+      liq.value = f != null ? F.brl(f - d) : "";
+    });
+  }
+  $("#abas-fin").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) mostrarAba(+b.dataset.k); });
+  $("#paineis-fin").addEventListener("input", marcarAbas);
+  $("#paineis-fin").addEventListener("click", function (e) {
+    var ir = e.target.closest("[data-ir]");
+    if (ir) { mostrarAba(+ir.dataset.ir); $("#abas-fin").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    var b = e.target.closest("[data-copiar]"); if (!b) return;
+    var k = +b.dataset.copiar, de = $('#paineis-fin .painel-mes[data-k="' + (k - 1) + '"]'), para = $('#paineis-fin .painel-mes[data-k="' + k + '"]');
+    FIXOS.forEach(function (it) {
+      var o = de.querySelector('input[name$="· ' + it + '"]'), d = para.querySelector('input[name$="· ' + it + '"]');
+      if (o && d && o.value && !d.value) d.value = o.value;
+    });
+  });
+
+  function montarVendas() {
+    var box = $("#grade-vendas"), antes = guardar(box), html = "";
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    meses().forEach(function (mm) {
+      var rot = F.curto(mm[0], mm[1]);
+      html += '<div class="grupo">' + rot + '</div><div class="linha3">';
+      ITENS_VEN.forEach(function (it) {
+        var nome = rot + " · " + it[0];
+        html += campoValor(nome, it[0] === "Ticket médio" ? "se tiver" : "", it[1], antes[nome] || "");
+      });
+      html += "</div>";
+    });
+    box.innerHTML = html;
+    F.sincronizar();
+  }
+
+  // ---------- canais marcados na parte 1 viram blocos
+  var CANAL_CAMPOS = [["Receita", "rs"], ["Pedidos", "numeric"], ["Taxas e comissões", "rs"], ["Investimento em anúncios", "rs"],
+                      ["Vendas atribuídas aos anúncios", "rs"]];
+  function montarCanais() {
+    F.juntar();
+    var box = $("#canais-detalhe"), antes = guardar(box);
+    var lista = $("#h-canais").value ? $("#h-canais").value.split(", ") : [];
+    if (!lista.length) { box.innerHTML = '<p class="vazio">Marque os canais na parte 1.</p>'; return; }
+    box.innerHTML = lista.map(function (c) {
+      return '<div class="bloco-canal"><div class="nome">' + c + '</div><div class="linha">'
+        + CANAL_CAMPOS.map(function (f) { var n = "Canal " + c + " · " + f[0]; return campoValor(n, "", f[1], antes[n] || ""); }).join("")
+        + "</div></div>";
+    }).join("");
+  }
+  // limite de canais deste formulário (o Diagnóstico padrão cobre até 3): o que passar do limite é desfeito e o aviso acende
+  var MAX_CANAIS = +($("#canais").dataset.max || 0);
+  function contarCanais() { F.juntar(); return $("#h-canais").value ? $("#h-canais").value.split(", ").length : 0; }
+  function avisoLimite(aceso) {
+    var a = $("#canais-limite");
+    if (a) { a.style.color = aceso ? "var(--erro)" : ""; a.style.fontWeight = aceso ? "600" : ""; }
+  }
+  function limitarCanais(e) {
+    if (!MAX_CANAIS) return;
+    var passou = contarCanais() > MAX_CANAIS;
+    if (passou) {
+      if (e.target.type === "checkbox") e.target.checked = false;
+      else {                                  // campo "outro": fica só o que couber
+        var cabem = MAX_CANAIS - $$("#canais input:checked").length;
+        e.target.value = e.target.value.split(/[,;]/).map(function (n) { return n.trim(); }).filter(Boolean).slice(0, Math.max(cabem, 0)).join(", ");
+      }
+    }
+    avisoLimite(passou);
+  }
+  $("#canais").addEventListener("change", function (e) { limitarCanais(e); montarCanais(); });
+  $("#canal-outro").addEventListener("change", function (e) { limitarCanais(e); montarCanais(); });
+
+  // ---------- marketing: plataformas escolhidas viram blocos, com valor por mês e total do período
+  // Os totais mantêm os nomes de antes ("Meta Ads · Investimento no período", "Meta Ads · Receita atribuída"):
+  // com os meses preenchidos, o total é a soma; sem eles, a pessoa digita só o total.
+  var NOME_PLAT = { "Marketplace Ads": "Marketplace Ads (Mercado Ads, Shopee Ads…)" };
+  var MKT_METRICAS = [["Investimento", "Investimento no período", ""], ["Receita atribuída", "Receita atribuída", "vendas trazidas pelos anúncios, se tiver"]];
+  function montarMkt() {
+    F.juntar();
+    var box = $("#grade-mkt"), antes = guardar(box);
+    var lista = $("#h-plataformas").value ? $("#h-plataformas").value.split(", ") : [];
+    if (!lista.length) { box.innerHTML = ""; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    var ms = meses();
+    box.innerHTML = lista.map(function (base) {
+      var html = '<div class="bloco-canal" data-plat="' + base + '"><div class="nome">' + (NOME_PLAT[base] || base) + '</div>';
+      MKT_METRICAS.forEach(function (mt) {
+        html += '<div class="sub">' + mt[0] + (mt[2] ? ' <span class="opc">· ' + mt[2] + '</span>' : "") + '</div><div class="meses-grade" data-met="' + mt[0] + '">';
+        ms.forEach(function (mm) {
+          var n = base + " · " + mt[0] + " · " + F.curto(mm[0], mm[1]);
+          html += campoValor(n, "", "rs", antes[n] || "");
+        });
+        html += "</div>";
+      });
+      html += '<div class="sub" style="margin-top:6px">Total do período <span class="opc">· soma sozinho quando você preenche os meses</span></div><div class="linha3">';
+      MKT_METRICAS.forEach(function (mt) {
+        var n = base + " · " + mt[1];
+        html += campoValor(n, "", "rs", antes[n] || "", ' data-total="' + mt[0] + '"');
+      });
+      var nc = base + " · Clientes novos vindos dos anúncios";
+      html += campoValor(nc, "se tiver", "numeric", antes[nc] || "") + "</div></div>";
+      return html;
+    }).join("");
+    somarMkt();
+  }
+  function somarMkt() {
+    $$("#grade-mkt [data-plat]").forEach(function (bloco) {
+      MKT_METRICAS.forEach(function (mt) {
+        var vals = $$('[data-met="' + mt[0] + '"] input', bloco).map(function (i) { return F.num(i.value); }).filter(function (v) { return v != null; });
+        var tot = $('input[data-total="' + mt[0] + '"]', bloco);
+        if (vals.length) { tot.value = F.brl(vals.reduce(function (a, b) { return a + b; }, 0)); tot.readOnly = true; }
+        else if (tot.readOnly) { tot.value = ""; tot.readOnly = false; }
+      });
+    });
+  }
+  $("#plataformas").addEventListener("change", montarMkt);
+  $("#grade-mkt").addEventListener("input", function (e) { if (!e.target.dataset.total) somarMkt(); });
+
+  // ---------- acontecimentos: chips em cada mês do período
+  var EVENTOS = ["Promoção", "Mudança de preço", "Novo produto ou canal", "Problema de estoque", "Troca de fornecedor",
+                 "Campanha", "Sazonalidade", "Mudança operacional"];
+  function idMes(mm) { return "ev-" + mm[1] + "-" + (mm[0] + 1); }
+  function montarEventos() {
+    var box = $("#grade-eventos"), marcados = {}, nomes = {};
+    $$("input[type=checkbox]:checked", box).forEach(function (c) { marcados[c.closest("[data-junta]").dataset.junta + ":" + c.value] = true; });
+    $$("input[data-nome-ev]", box).forEach(function (c) { nomes[c.dataset.nomeEv] = c.value; });
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    box.innerHTML = meses().map(function (mm) {
+      var id = idMes(mm), rot = F.curto(mm[0], mm[1]);
+      return '<div class="mes-ev"><div class="grupo">' + rot + '</div><div class="chips peq" data-junta="' + id + '">'
+        + EVENTOS.map(function (ev) {
+            return '<label><input type="checkbox" value="' + ev + '"' + (marcados[id + ":" + ev] ? " checked" : "") + '><span>' + ev + "</span></label>";
+          }).join("")
+        + '</div><input type="hidden" id="' + id + '" name="Acontecimentos · ' + rot + '">'
+        + '<input type="text" class="nome-ev" data-nome-ev="' + id + '" name="Nome do evento · ' + rot + '" maxlength="50"'
+        + ' placeholder="Dê um nome curto ao que aconteceu (opcional). Ex.: Dia das Mães"'
+        + ' value="' + (nomes[id] || "").replace(/"/g, "&quot;") + '" aria-label="Nome do evento de ' + rot + '"></div>';
+    }).join("");
+  }
+  function juntarEventos() {
+    F.juntar();
+    $("#h-eventos").value = meses().map(function (mm) {
+      var el = document.getElementById(idMes(mm));
+      return el && el.value ? F.curto(mm[0], mm[1]) + ": " + el.value : "";
+    }).filter(Boolean).join("; ");
+  }
+
+  // ---------- fornecedores (grade fixa)
+  $("#grade-forn").innerHTML = [1, 2, 3].map(function (i) {
+    var n = "Fornecedor " + i + " · ";
+    return '<div class="bloco-canal" data-forn="' + i + '"' + (i > 1 ? ' style="display:none"' : "") + '><div class="linha">'
+      + '<div class="campo"><label class="dica" for="fn' + i + '" style="margin:0 0 4px">Fornecedor</label><input type="text" id="fn' + i + '" name="' + n + 'Nome"></div>'
+      + '<div class="campo"><label class="dica" for="fp' + i + '" style="margin:0 0 4px">Produto ou categoria</label><input type="text" id="fp' + i + '" name="' + n + 'Produto ou categoria"></div>'
+      + campoValor(n + "Valor comprado no período", "", "rs", "")
+      + '<div class="campo"><label class="dica" for="fz' + i + '" style="margin:0 0 4px">Prazo para pagar</label><input type="text" id="fz' + i + '" name="' + n + 'Prazo" placeholder="ex.: 30 dias, à vista"></div>'
+      + '<div class="campo"><label class="dica" for="ff' + i + '" style="margin:0 0 4px">Frequência de compra</label><input type="text" id="ff' + i + '" name="' + n + 'Frequência" placeholder="ex.: mensal"></div>'
+      + "</div></div>";
+  }).join("") + '<button type="button" class="mini" id="mais-forn">+ Adicionar outro fornecedor</button>';
+  $("#mais-forn").addEventListener("click", function () {
+    var oculto = $$('#grade-forn [data-forn]').filter(function (b) { return b.style.display === "none"; })[0];
+    if (oculto) oculto.style.display = "";
+    if ($$('#grade-forn [data-forn]').every(function (b) { return b.style.display !== "none"; })) this.style.display = "none";
+  });
+
+  function atualizarPeriodo() {
+    var ms = meses(), el = $("#periodo-txt");
+    if (!periodoOk()) { el.style.color = "var(--erro)"; el.textContent = ms.length < 3 ? "Escolha pelo menos 3 meses." : "No máximo 6 meses."; }
+    else { el.style.color = ""; el.textContent = ms.length + " meses: " + F.MESES[ms[0][0]] + "/" + ms[0][1] + " a " + F.MESES[ms[ms.length - 1][0]] + "/" + ms[ms.length - 1][1]; }
+    montarFinanceiro(); montarVendas(); montarMkt(); montarEventos(); F.sincronizar();
+  }
+  ["#ini-mes", "#ini-ano", "#fim-mes", "#fim-ano"].forEach(function (s) { $(s).addEventListener("change", atualizarPeriodo); });
+  atualizarPeriodo();
+
+  F.autosalvar("finspots-form-diagnostico", function () { montarCanais(); atualizarPeriodo(); });
+  somarMkt();
+  $$('#grade-forn [data-forn]').forEach(function (b) {     // fornecedores preenchidos antes voltam visíveis
+    if ($$("input", b).some(function (i) { return i.value.trim(); })) b.style.display = "";
+  });
+  if ($$('#grade-forn [data-forn]').every(function (b) { return b.style.display !== "none"; })) $("#mais-forn").style.display = "none";
+
+  // ---------- regra: o essencial precisa vir; o resto nunca trava
+  F.aoEnviar(function () {
+    var e = [];
+    [["#loja", "nome da loja"], ["#resp", "responsável"], ["#zap", "WhatsApp"], ["#email", "e-mail"]].forEach(function (c) {
+      if (!F.preenchido($(c[0]))) e.push("Parte 1: " + c[1] + ".");
+    });
+    if (!periodoOk()) e.push("Parte 1: período de 3 a 6 meses.");
+    if (!$('input[name="Regime tributário"]:checked')) e.push("Parte 1: regime tributário.");
+    var modoFin = $('input[name="grp-fin"]:checked').value;
+    if (modoFin === "arquivo" && !F.temArquivo("#f-dre")) e.push("Parte 2: anexe a DRE ou planilha financeira (ou escolha preencher aqui).");
+    if (modoFin === "mao") {
+      var faltam = $$("#paineis-fin .painel-mes").filter(function (p) {
+        return !p.querySelector('input[name$="· Faturamento bruto"]').value.trim()
+          || !$$("input", p).some(function (i) { return !/Faturamento bruto|Devoluções|Receita líquida/.test(i.name) && i.value.trim(); });
+      }).map(function (p) { return $('#abas-fin button[data-k="' + p.dataset.k + '"]').textContent.replace("✓", ""); });
+      if (faltam.length) e.push("Parte 2: faturamento e pelo menos um custo de " + faltam.join(", ") + ".");
+    }
+    var modoVen = $('input[name="grp-ven"]:checked').value;
+    if (modoVen === "arquivo" && !F.temArquivo("#f-vendas")) e.push("Parte 3: anexe o relatório de vendas (ou escolha preencher aqui).");
+    if (modoVen === "mao" && $$('#grade-vendas input[name$="· Pedidos"]').some(function (i) { return !i.value.trim(); }))
+      e.push("Parte 3: número de pedidos de cada mês.");
+    return e;
+  }, function () {
+    juntarEventos();
+    var ms = meses();
+    $("#h-periodo").value = F.MESES[ms[0][0]] + (ms[0][1] !== ms[ms.length - 1][1] ? "/" + ms[0][1] : "") + " a "
+                          + F.MESES[ms[ms.length - 1][0]] + "/" + ms[ms.length - 1][1];
+    $("#assunto").value = "Novo diagnóstico: " + $("#loja").value.trim();
+    $$("#paineis-fin input[readonly]").forEach(function (i) { if (!i.value) i.disabled = true; });
+  });
+})();
+</script>
+</body>
+</html>
