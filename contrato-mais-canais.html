@@ -95,6 +95,21 @@ border: 1px solid rgba(255,255,255,0.16); border-radius: 9px; padding: 12px 13px
 #pronto { display: none; }
 #pronto .contrato-caixa { text-align: center; }
 .btn-linha { background: transparent; color: var(--branco); border: 1.5px solid rgba(255,255,255,0.35); margin-bottom: 12px; }
+#folha { background: #fff; color: #111; border-radius: 10px; padding: 22px 20px; margin-top: 14px; max-height: 62vh; overflow: auto;
+font-family: Arial, Helvetica, sans-serif; font-size: 13px; line-height: 1.5; text-align: left; }
+#folha p { color: #111; font-size: 13px; margin: 8px 0; }
+#folha h1 { font-size: 18px; margin: 0 0 2px; color: #111; }
+#folha h2 { font-size: 14px; margin: 16px 0 6px; color: #111; }
+#folha table { border-collapse: collapse; width: 100%; }
+#folha td { border: 1px solid #ccc; padding: 5px 9px; vertical-align: top; }
+#folha td:first-child { width: 34%; font-weight: 700; }
+#folha hr { margin: 18px 0; border: 0; border-top: 1px solid #999; }
+@media print {
+  body * { visibility: hidden; }
+  #bg-fundo { display: none; }
+  #folha, #folha * { visibility: visible; }
+  #folha { position: absolute; left: 0; top: 0; width: 100%; max-height: none; overflow: visible; border-radius: 0; padding: 0; }
+}
 .nota-checkout { font-size: 11.5px; color: var(--fraco); text-align: center; margin-top: 10px; }
 
 footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fraco); }
@@ -180,18 +195,18 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 
 <div id="passo-gerar">
 <button type="button" class="btn btn-primario" id="btn-gerar">Gerar meu contrato para leitura</button>
-<p class="nota-checkout">Montamos o contrato em PDF com os seus dados para você ler antes de concordar.</p>
+<p class="nota-checkout">Montamos o contrato com os seus dados para você ler antes de concordar.</p>
 </div>
 
 <div id="passo-ler" style="display:none;">
 <div class="contrato-caixa" style="margin-top:0;">
 <div class="caixa-head">
 <span class="icone"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>
-<h2>Seu contrato está pronto para leitura</h2>
+<h2>Leia o seu contrato</h2>
 </div>
-<p>Ele traz os seus dados, o valor, os canais, o prazo e as Condições de Contratação completas.</p>
-<a class="btn btn-linha" id="btn-abrir" href="#" target="_blank" rel="noopener" style="margin-top:14px;">Abrir o contrato (PDF)</a>
-<a class="btn btn-linha" id="btn-baixar" href="#" download style="margin-bottom:0;">Baixar o contrato</a>
+<p>Ele traz os seus dados, o valor, os canais, o prazo e as Condições de Contratação completas. Role para ler até o fim.</p>
+<div id="folha" tabindex="0" aria-label="Texto do contrato"></div>
+<button type="button" class="btn btn-linha" id="btn-imprimir" style="margin:14px 0 0;">Imprimir ou salvar em PDF</button>
 </div>
 
 <label class="aceite">
@@ -200,14 +215,14 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 </label>
 
 <button type="button" class="btn btn-primario" id="btn-continuar" aria-disabled="true">Concordo, ir para o pagamento</button>
-<p class="nota-checkout">Ao confirmar, registramos o seu aceite e enviamos o contrato para o seu e-mail. Depois vem o pagamento seguro pela Kiwify.</p>
+<p class="nota-checkout">Ao confirmar, registramos o seu aceite e enviamos o contrato em PDF para o seu e-mail. Depois vem o pagamento seguro pela Kiwify.</p>
 </div>
 </div>
 
 <div id="pronto">
 <div class="contrato-caixa" style="margin-top:0;">
 <h2 style="font-size:18px; margin-top:0;">Contrato registrado</h2>
-<p>Contrato nº <b style="color:var(--branco);" id="num-contrato"></b>. Enviamos uma cópia para <b style="color:var(--branco);" id="email-contrato"></b>.</p>
+<p>Contrato nº <b style="color:var(--branco);" id="num-contrato"></b>. Enviamos o PDF para <b style="color:var(--branco);" id="email-contrato"></b>.</p>
 </div>
 <a class="btn btn-primario" id="btn-pagar" href="https://pay.kiwify.com.br/E9udSUM">Ir para o pagamento</a>
 <p class="nota-checkout">Você será levado ao pagamento em instantes. Pagamento seguro pela Kiwify. Depois você envia os dados da sua loja.</p>
@@ -274,25 +289,67 @@ function enviar(d) {
 function falha(x, padrao) { erro([(x && x.message ? x.message : padrao) + ZAP]); }
 function travar(sim) { CAMPOS.forEach(function (id) { $(id).readOnly = sim; $(id).style.opacity = sim ? '0.7' : ''; }); }
 
-// 1) gera o contrato em PDF para leitura (nada é registrado nem enviado ainda)
+// 1) monta o contrato para leitura, com os dados da pessoa e as Condições de Contratação desta data
+var NOME_SERVICO = 'Diagnóstico Financeiro Finspots (mais canais)', COND = 'condicoes-contratacao-mais-canais.html';
+function docFormatado(v) {
+  var x = v.toUpperCase().replace(/[^0-9A-Z]/g, '');
+  return x.length === 11 ? ['CPF', x.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')]
+                         : ['CNPJ', x.replace(/^(.{2})(.{3})(.{3})(.{4})(.{2})$/, '$1.$2.$3/$4-$5')];
+}
+function montarFolha(d, condicoes) {
+  var folha = $('folha'); folha.innerHTML = '';
+  var el = function (tag, txt) { var e = document.createElement(tag); if (txt != null) e.textContent = txt; folha.appendChild(e); return e; };
+  var tabela = function (linhas) {
+    var tb = el('table');
+    linhas.forEach(function (l) { var tr = tb.insertRow(); tr.insertCell().textContent = l[0]; tr.insertCell().textContent = l[1]; });
+  };
+  var doc = docFormatado(d.documento);
+  el('h1', 'Contrato de Prestação de Serviço');
+  el('p', NOME_SERVICO + ' · Para leitura, ainda sem aceite');
+  el('h2', 'Contratante');
+  tabela([['Nome', d.nome], ['Loja', d.loja], [doc[0], doc[1]], ['E-mail', d.email]]);
+  el('h2', 'Contratada');
+  el('p', 'Finspots · Helaynne Alessandra Santos Freitas, CPF 092.069.591-40 · WhatsApp (62) 99665-3913');
+  el('h2', 'O que foi contratado');
+  tabela([['Serviço', NOME_SERVICO], ['Canais de venda', canais + ' canais de venda'], ['Período analisado', 'De 3 a 6 meses'],
+          ['Valor', $('txt-valor').textContent + ', em pagamento único'],
+          ['Prazo de entrega', 'Até ' + (prazo || 15) + ' dias úteis após a confirmação do pagamento e o recebimento completo dos dados'],
+          ['Garantia', '7 dias, contados a partir da entrega do diagnóstico']]);
+  el('p', 'Os canais, o valor e o prazo deste quadro são os combinados no orçamento aprovado pelo contratante e prevalecem sobre os valores genéricos das Condições de Contratação.');
+  el('h2', 'Aceite eletrônico');
+  el('p', 'O aceite é registrado, com data e hora, quando o contratante marca a opção de concordância e confirma nesta página. A versão em PDF, com o número do contrato e o registro do aceite, é enviada por e-mail.');
+  el('hr'); el('h1', 'Condições de Contratação');
+  folha.appendChild(condicoes);
+  folha.scrollTop = 0;
+}
+function carregarCondicoes() {
+  return fetch(COND, { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error(''); return r.text(); }).then(function (html) {
+    var main = new DOMParser().parseFromString(html, 'text/html').querySelector('main');
+    if (!main) throw new Error('');
+    var caixa = document.createElement('div');
+    caixa.innerHTML = main.innerHTML;
+    var h1 = caixa.querySelector('h1'); if (h1) h1.remove();
+    Array.prototype.forEach.call(caixa.querySelectorAll('[style]'), function (e) { e.removeAttribute('style'); });
+    Array.prototype.forEach.call(caixa.querySelectorAll('a'), function (a) { a.replaceWith(document.createTextNode(a.textContent)); });
+    return caixa;
+  });
+}
 var btnGerar = $('btn-gerar');
 btnGerar.addEventListener('click', function () {
   var r = lerCampos();
   if (r.erros) return erro(r.erros);
   aviso.className = 'aviso'; btnGerar.disabled = true; btnGerar.textContent = 'Montando o seu contrato…';
-  r.dados.acao = 'previa';
-  enviar(r.dados).then(function (j) {
-    var bytes = Uint8Array.from(atob(j.pdf), function (ch) { return ch.charCodeAt(0); });
-    var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
-    $('btn-abrir').href = url; $('btn-baixar').href = url; $('btn-baixar').download = j.nomeArquivo;
+  carregarCondicoes().then(function (condicoes) {
+    montarFolha(r.dados, condicoes);
     lido = r.dados; travar(true);
     $('passo-gerar').style.display = 'none'; $('alterar').style.display = 'block';
     $('passo-ler').style.display = 'block';
     atualizarBotao();
-    $('passo-ler').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    $('passo-ler').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }).catch(function (x) { falha(x, 'Não conseguimos montar o contrato agora. Tente de novo em alguns minutos.'); })
     .then(function () { btnGerar.disabled = false; btnGerar.textContent = 'Gerar meu contrato para leitura'; });
 });
+$('btn-imprimir').addEventListener('click', function () { window.print(); });
 // mudou os dados: o contrato precisa ser gerado e lido de novo
 $('lnk-alterar').addEventListener('click', function (ev) {
   ev.preventDefault();
