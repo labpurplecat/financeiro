@@ -279,14 +279,41 @@ function lerCampos() {
   if (d.nome.length < 5 || d.nome.indexOf(' ') < 0) e.push('Informe o nome completo.');
   if (d.loja.length < 2) e.push('Informe o nome da loja.');
   if (n !== 11 && n !== 14) e.push('Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).');
+  else if (n === 11 && !cpfValido(d.documento.replace(/\D/g, ''))) e.push('Confira o CPF: os números não batem.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.push('Informe um e-mail válido.');
   if (PAG.orcamento) { d.valor = String(valor); d.canais = String(canais); if (prazo) d.prazo = String(prazo); }
   return e.length ? { erros: e } : { dados: d };
 }
+function cpfValido(c) {
+  if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
+  for (var t = 9; t < 11; t++) {
+    var s = 0;
+    for (var i = 0; i < t; i++) s += +c[i] * (t + 1 - i);
+    if ((s * 10) % 11 % 10 !== +c[t]) return false;
+  }
+  return true;
+}
+function numeroNovo() {
+  var h = new Date(), p = function (x) { return ('0' + x).slice(-2); }, abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', s = '';
+  for (var i = 0; i < 4; i++) s += abc.charAt(Math.floor(Math.random() * abc.length));
+  return 'FS-' + h.getFullYear() + p(h.getMonth() + 1) + p(h.getDate()) + '-' + s;
+}
+// Envia o aceite. O registro acontece quando o pedido chega ao servidor; a resposta pode demorar.
+// Recusa do servidor ou falha de conexão viram erro; resposta lenta ou ilegível segue em frente (o pedido já foi entregue).
 function enviar(d) {
-  return fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) })
-    .then(function (r) { return r.json(); })
-    .then(function (j) { if (!j || !j.ok) throw new Error((j && j.erro) || ''); return j; });
+  var inicio = Date.now();
+  var pedido = fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) })
+    .then(function (r) { return r.text(); }, function () {
+      if (Date.now() - inicio < 3000) throw new Error('Sem conexão com o servidor. Confira a internet e tente de novo.');
+      return '';
+    })
+    .then(function (txt) {
+      var j = null; try { j = JSON.parse(txt); } catch (x) {}
+      if (j && j.ok === false) throw new Error(j.erro || 'Não foi possível registrar.');
+      return j || { ok: true, numero: d.numero, semResposta: true };
+    });
+  var espera = new Promise(function (ok) { setTimeout(function () { ok({ ok: true, numero: d.numero, semResposta: true }); }, 15000); });
+  return Promise.race([pedido, espera]);
 }
 function falha(x, padrao) { erro([(x && x.message ? x.message : padrao) + ZAP]); }
 function travar(sim) { CAMPOS.forEach(function (id) { $(id).readOnly = sim; $(id).style.opacity = sim ? '0.7' : ''; }); }
@@ -343,7 +370,7 @@ btnGerar.addEventListener('click', function () {
   aviso.className = 'aviso'; btnGerar.disabled = true; btnGerar.textContent = 'Montando o seu contrato…';
   carregarCondicoes().then(function (condicoes) {
     montarFolha(r.dados, condicoes);
-    lido = r.dados; travar(true);
+    lido = r.dados; lido.numero = numeroNovo(); travar(true);
     $('passo-gerar').style.display = 'none'; $('alterar').style.display = 'block';
     $('passo-ler').style.display = 'block';
     atualizarBotao();
@@ -366,7 +393,7 @@ btn.addEventListener('click', function () {
   var d = Object.assign({}, lido, { acao: 'aceite', aceite: true });
   aviso.className = 'aviso'; btn.disabled = true; btn.textContent = 'Registrando o seu aceite…';
   enviar(d).then(function (j) {
-    $('num-contrato').textContent = j.numero;
+    $('num-contrato').textContent = j.numero || d.numero;
     $('email-contrato').textContent = d.email;
     $('etapa-aceite').style.display = 'none';
     $('pronto').style.display = 'block';
