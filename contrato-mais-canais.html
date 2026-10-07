@@ -211,7 +211,7 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 
 <label class="aceite">
 <input type="checkbox" id="aceite-termos">
-<span>Li o contrato e concordo com os seus termos e com as <a href="condicoes-contratacao-mais-canais.html" target="_blank" style="color:var(--laranja); text-decoration:underline;">Condições de Contratação</a> completas.</span>
+<span>Li o contrato acima, incluindo as Condições de Contratação, e concordo com os seus termos.</span>
 </label>
 
 <button type="button" class="btn btn-primario" id="btn-continuar" aria-disabled="true">Concordo, ir para o pagamento</button>
@@ -236,7 +236,8 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 
 <script>
 var ENDPOINT = "https://script.google.com/macros/s/AKfycbxn9QSx3DdmdovfXd8we6a8EgyvOfSGf6RaWGXZ30sxKy-RJrWdQ75JeGXciLQl3FUB/exec";
-var TIPO = "mais-canais";
+var PAG = { tipo: "mais-canais", servico: "Diagnóstico Financeiro Finspots (mais canais)", cond: "condicoes-contratacao-mais-canais.html", prazo: 15, orcamento: true };
+var TIPO = PAG.tipo;
 var $ = function (id) { return document.getElementById(id); };
 var check = $('aceite-termos'), btn = $('btn-continuar'), aviso = $('aviso');
 
@@ -245,9 +246,10 @@ var q = new URLSearchParams(location.search);
 var valor = Number((q.get('valor') || '').replace(',', '.')), canais = parseInt(q.get('canais'), 10);
 var prazo = parseInt(q.get('prazo'), 10);
 if (!(prazo >= 5 && prazo <= 90)) prazo = 0;
+if (!PAG.orcamento) prazo = 0;
 if (prazo) $('txt-prazo').textContent = prazo + ' dias úteis';
-var orcamentoOk = valor >= 100 && valor <= 100000 && canais >= 4 && canais <= 40;
-if (orcamentoOk) {
+var orcamentoOk = !PAG.orcamento || (valor >= 100 && valor <= 100000 && canais >= 4 && canais <= 40);
+if (PAG.orcamento && orcamentoOk) {
   var brl = 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   $('txt-canais').textContent = canais + ' canais de venda';
   $('txt-valor').textContent = brl;
@@ -278,7 +280,7 @@ function lerCampos() {
   if (d.loja.length < 2) e.push('Informe o nome da loja.');
   if (n !== 11 && n !== 14) e.push('Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.push('Informe um e-mail válido.');
-  d.valor = String(valor); d.canais = String(canais); if (prazo) d.prazo = String(prazo);
+  if (PAG.orcamento) { d.valor = String(valor); d.canais = String(canais); if (prazo) d.prazo = String(prazo); }
   return e.length ? { erros: e } : { dados: d };
 }
 function enviar(d) {
@@ -290,7 +292,7 @@ function falha(x, padrao) { erro([(x && x.message ? x.message : padrao) + ZAP]);
 function travar(sim) { CAMPOS.forEach(function (id) { $(id).readOnly = sim; $(id).style.opacity = sim ? '0.7' : ''; }); }
 
 // 1) monta o contrato para leitura, com os dados da pessoa e as Condições de Contratação desta data
-var NOME_SERVICO = 'Diagnóstico Financeiro Finspots (mais canais)', COND = 'condicoes-contratacao-mais-canais.html';
+var NOME_SERVICO = PAG.servico, COND = PAG.cond;
 function docFormatado(v) {
   var x = v.toUpperCase().replace(/[^0-9A-Z]/g, '');
   return x.length === 11 ? ['CPF', x.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')]
@@ -311,11 +313,11 @@ function montarFolha(d, condicoes) {
   el('h2', 'Contratada');
   el('p', 'Finspots · Helaynne Alessandra Santos Freitas, CPF 092.069.591-40 · WhatsApp (62) 99665-3913');
   el('h2', 'O que foi contratado');
-  tabela([['Serviço', NOME_SERVICO], ['Canais de venda', canais + ' canais de venda'], ['Período analisado', 'De 3 a 6 meses'],
+  tabela([['Serviço', NOME_SERVICO], ['Canais de venda', PAG.orcamento ? canais + ' canais de venda' : 'Até 3 canais de venda'], ['Período analisado', 'De 3 a 6 meses'],
           ['Valor', $('txt-valor').textContent + ', em pagamento único'],
-          ['Prazo de entrega', 'Até ' + (prazo || 15) + ' dias úteis após a confirmação do pagamento e o recebimento completo dos dados'],
+          ['Prazo de entrega', 'Até ' + (prazo || PAG.prazo) + ' dias úteis após a confirmação do pagamento e o recebimento completo dos dados'],
           ['Garantia', '7 dias, contados a partir da entrega do diagnóstico']]);
-  el('p', 'Os canais, o valor e o prazo deste quadro são os combinados no orçamento aprovado pelo contratante e prevalecem sobre os valores genéricos das Condições de Contratação.');
+  if (PAG.orcamento) el('p', 'Os canais, o valor e o prazo deste quadro são os combinados no orçamento aprovado pelo contratante e prevalecem sobre os valores genéricos das Condições de Contratação.');
   el('h2', 'Aceite eletrônico');
   el('p', 'O aceite é registrado, com data e hora, quando o contratante marca a opção de concordância e confirma nesta página. A versão em PDF, com o número do contrato e o registro do aceite, é enviada por e-mail.');
   el('hr'); el('h1', 'Condições de Contratação');
