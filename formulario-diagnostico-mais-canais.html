@@ -176,7 +176,7 @@
 <div class="wrap">
   <header>
     <img src="assets/img/finspots-logo.png" alt="Finspots">
-    <a href="https://wa.me/5562996677168?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
+    <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
   </header>
 
   <h1>Vamos começar o seu <span>diagnóstico</span></h1>
@@ -344,7 +344,7 @@
         <span class="dica">Vale anúncio dentro dos marketplaces e fora deles (Instagram, Google). Se a loja anuncia, marque Sim: esse gasto entra na conta do resultado.</span>
         <div class="chips">
           <label><input type="radio" name="grp-mkt" value="sim" data-abre="mkt"><span>Sim</span></label>
-          <label><input type="radio" name="grp-mkt" value="nao" data-fecha="mkt"><span>Não</span></label>
+          <label><input type="radio" name="grp-mkt" value="nao" data-fecha="mkt" checked><span>Não</span></label>
         </div>
       </div>
       <div class="condicional" id="mkt">
@@ -613,7 +613,7 @@
       F.sincronizar();
       b.disabled = false; b.textContent = "Enviar para a Finspots";
       box.innerHTML = "Não conseguimos enviar agora. Suas respostas continuam salvas neste aparelho: tente de novo em alguns minutos"
-        + " ou <a href=\"https://wa.me/5562996677168?text=Oi!%20Tive%20um%20problema%20para%20enviar%20o%20formul%C3%A1rio.\">chame no WhatsApp</a>.";
+        + " ou <a href=\"https://wa.me/5562996653913?text=Oi!%20Tive%20um%20problema%20para%20enviar%20o%20formul%C3%A1rio.\">chame no WhatsApp</a>.";
     });
   };
 
@@ -924,24 +924,41 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
               : $$('#grade-vendas input[name$="· Pedidos"]').length > 0 && $$('#grade-vendas input[name$="· Pedidos"]').every(function (i) { return i.value.trim(); });
     var relVendas = arq("#f-vendas");
     var canais = $("#h-canais").value ? $("#h-canais").value.split(", ") : [];
-    var canaisOk = canais.length > 0 && (relVendas || $$('#canais-detalhe input[name$="· Receita"]').every(function (i) { return i.value.trim(); }));
+    // canal sem receita informada; com relatório anexado, só cobramos os canais que não têm relatório de marketplace (loja física, Instagram / WhatsApp)
+    var semReceita = canais.filter(function (c) {
+      return !$$("#canais-detalhe input").some(function (i) { return i.name === "Canal " + c + " · Receita" && i.value.trim(); });
+    });
+    var nArqVendas = $$("#f-vendas").reduce(function (n, i) { return n + (i.disabled ? 0 : i.files.length); }, 0);
+    var semRelatorio = nArqVendas >= canais.length ? [] : semReceita.filter(function (c) { return c === "Loja física" || c === "Instagram / WhatsApp"; });
+    var canaisOk = canais.length > 0 && (relVendas ? !semRelatorio.length : !semReceita.length);
     var mkt = ($('input[name="grp-mkt"]:checked') || {}).value;
     var mktDados = arq("#f-ads") || tem("#grade-mkt input") || tem('#canais-detalhe input[name$="· Investimento em anúncios"]');
     var falta = [], leve = [];
     if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["03 · O dinheiro em conta dá para quanto tempo?", "Depende do extrato bancário do período (parte 7)."]);
     if (!canaisOk) falta.push(["05 · Quais canais realmente deixam lucro? e 10 · Qual é a meta de faturamento para investir em anúncios?",
-                               canais.length ? "Dependem do relatório de vendas de cada canal ou da receita de cada canal (parte 3)." : "Dependem dos canais de venda marcados na parte 1."]);
+                               canais.length ? (relVendas && semRelatorio.length ? "Informe a receita de " + semRelatorio.join(" e ") + " na parte 3 ou anexe o relatório desse canal."
+                                                : "Dependem do relatório de vendas de cada canal ou da receita de cada canal (parte 3).") : "Dependem dos canais de venda marcados na parte 1."]);
     if (!relVendas && !arq("#f-prod")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro?", "Depende do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
     else if (!arq("#f-cat")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro? (sai sem a sobra de cada produto)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
     if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["07 · Meus clientes voltam?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
     if (mkt === "sim" && !mktDados) falta.push(["08 e 09 · As perguntas sobre os anúncios", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
+    // marcou onde anuncia, mas deixou os valores em branco e não anexou relatório
+    var platVazia = function (p) {
+      var b = $$("#grade-mkt [data-plat]").filter(function (x) { return x.dataset.plat === p; })[0];
+      return !!b && !$$("input", b).some(function (i) { return i.value.trim(); });
+    };
+    if (mkt === "sim" && mktDados && !arq("#f-ads")) {
+      if (platVazia("Marketplace Ads") && !tem('#canais-detalhe input[name$="· Investimento em anúncios"]'))
+        falta.push(["08 · Os anúncios dentro das plataformas se pagam?", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
+      var foraVazias = ["Meta Ads", "Google Ads", "Outro"].filter(platVazia);
+      if (foraVazias.length) falta.push(["09 · O investimento fora das plataformas cabe no meu negócio?", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
+    }
     if (mkt !== "sim") leve.push(["08 e 09 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
-    if (!tem("#duv")) leve.push(["A sua pergunta", "Em branco, essa parte não entra (parte 9)."]);
     var nivel = !finOk || !venOk ? "falta" : falta.length ? "parcial" : leve.length ? "quase" : "completo";
     return { nivel: nivel, finOk: finOk, venOk: venOk, falta: falta, leve: leve };
   }
   var ST = {
-    completo: ["Tudo certo: o seu Diagnóstico vem completo.", "Com o que você preencheu, as 10 perguntas e a sua pergunta serão respondidas.",
+    completo: ["Tudo certo: o seu Diagnóstico vem completo.", "Com o que você preencheu, todas as perguntas da sua loja serão respondidas.",
                "Estou ciente de que o meu Diagnóstico será feito com as informações deste formulário."],
     quase: ["Quase tudo: só fica de fora o que é opcional.", "As perguntas de Financeiro e Vendas serão respondidas. O que não entra está abaixo.",
             "Estou ciente de que o meu Diagnóstico será feito sem os itens listados acima."],
