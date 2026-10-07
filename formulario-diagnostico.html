@@ -117,6 +117,28 @@
   .btn:disabled { opacity: .6; cursor: wait; }
   .lgpd { color: var(--fraco); font-size: 13px; margin-top: 14px; }
   .lgpd a { color: var(--suave); }
+
+  /* ---------- situação do formulário (o que o Diagnóstico vai conseguir responder) */
+  .situacao { border: 1.5px solid var(--borda); border-radius: 14px; padding: 18px 18px 16px; margin: 22px 0 6px; text-align: left; }
+  .situacao .st-rot { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--fraco); }
+  .situacao .st-barra { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 10px 0 12px; }
+  .situacao .st-barra i { height: 8px; border-radius: 99px; background: rgba(255,255,255,.10); }
+  .situacao h3 { font-size: 17px; font-weight: 700; margin: 0 0 4px; }
+  .situacao p { font-size: 14px; color: var(--suave); margin: 0; }
+  .situacao ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+  .situacao li { font-size: 13.5px; color: var(--suave); border-left: 2px solid var(--st-cor); padding-left: 10px; }
+  .situacao li b { color: var(--branco); font-weight: 600; display: block; }
+  .situacao .st-ok { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--borda); font-size: 14px; color: var(--branco); cursor: pointer; }
+  .situacao .st-ok input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--laranja); }
+  .situacao[data-nivel="completo"] { --st-cor: #07C480; border-color: #07C480; }
+  .situacao[data-nivel="quase"] { --st-cor: #8BE3BD; border-color: #8BE3BD; }
+  .situacao[data-nivel="parcial"] { --st-cor: #F2B01E; border-color: #F2B01E; }
+  .situacao[data-nivel="falta"] { --st-cor: #FF364E; border-color: #FF364E; }
+  .situacao h3 { color: var(--st-cor); }
+  .situacao[data-nivel="falta"] .st-barra i:nth-child(-n+1),
+  .situacao[data-nivel="parcial"] .st-barra i:nth-child(-n+2),
+  .situacao[data-nivel="quase"] .st-barra i:nth-child(-n+3),
+  .situacao[data-nivel="completo"] .st-barra i { background: var(--st-cor); }
   .aviso-erro { color: var(--erro); font-size: 14px; margin-top: 12px; text-align: left; }
   .aviso-erro ul { margin: 6px 0 0 18px; }
   .escondido { position: absolute; left: -9999px; }
@@ -154,7 +176,7 @@
 <div class="wrap">
   <header>
     <img src="assets/img/finspots-logo.png" alt="Finspots">
-    <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
+    <a href="https://wa.me/5562996677168?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
   </header>
 
   <h1>Vamos começar o seu <span>diagnóstico</span></h1>
@@ -177,6 +199,7 @@
     <input type="hidden" name="Período analisado" id="h-periodo">
     <input type="hidden" name="Principais canais de venda" id="h-canais">
     <input type="hidden" name="Quantidade de canais" id="h-canais-qtd">
+    <input type="hidden" name="Investe em anúncios" id="h-investe">
     <input type="hidden" name="O que aconteceu no período" id="h-eventos">
 
     <!-- 1 ---------------------------------------------------------------->
@@ -220,7 +243,7 @@
           <label><input type="checkbox" value="Loja física"><span>Loja física</span></label>
         </div>
         <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui" style="margin-top:10px" data-sempre>
-        <span class="dica" id="canais-limite" style="margin-top:8px">O Diagnóstico analisa até 3 canais de venda. Sua loja vende em mais de 3? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%203%20canais%20e%20quero%20um%20or%C3%A7amento%20do%20Diagn%C3%B3stico%20Financeiro." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a> para um orçamento.</span>
+        <span class="dica" id="canais-limite" style="margin-top:8px">O Diagnóstico analisa até 3 canais de venda. Sua loja vende em mais de 3? <a href="https://wa.me/5562996677168?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%203%20canais%20e%20quero%20um%20or%C3%A7amento%20do%20Diagn%C3%B3stico%20Financeiro." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a> para um orçamento.</span>
       </div>
 
       <div class="campo">
@@ -265,7 +288,7 @@
       </div>
       <div class="condicional" id="fin-arq">
         <div class="arquivo"><label class="t" for="f-dre">DRE ou planilha financeira do período</label>
-          <span class="dica">PDF, Excel ou CSV. Pode ser do contador, do sistema ou a planilha que você usa.</span>
+          <span class="dica">PDF, Excel ou CSV. Pode ser do contador, do sistema ou a planilha que você usa. Os valores precisam vir separados por mês: é assim que mostramos a trajetória da loja.</span>
           <input type="file" id="f-dre" name="DRE" multiple accept=".pdf,.xlsx,.xls,.csv,.ods,.png,.jpg,.jpeg"></div>
       </div>
       <div class="condicional" id="fin-mao">
@@ -291,13 +314,13 @@
           <input type="file" id="f-vendas" name="Vendas" multiple accept=".csv,.xlsx,.xls,.ods"></div>
       </div>
       <div class="condicional" id="ven-mao">
-        <span class="dica">Faturamento e devoluções você já informou no resultado financeiro. Aqui, só o que falta de cada mês.</span>
+        <span class="dica">Faturamento e devoluções já vêm do resultado financeiro (parte 2). Aqui, só o que falta de cada mês.</span>
         <div id="grade-vendas"></div>
       </div>
 
       <div class="campo" style="margin-top:8px">
-        <span class="t">Números por canal <span class="opc">(se tiver; total do período)</span></span>
-        <span class="dica">Os canais marcados na parte 1 aparecem aqui.</span>
+        <span class="t">Números por canal <span class="opc">(total do período)</span></span>
+        <span class="dica">Os canais marcados na parte 1 aparecem aqui. A receita e as taxas de cada canal são o que mostra quanto cada um deixa. Anexou o relatório de vendas de todos os canais? Pode pular.</span>
         <div id="canais-detalhe"><p class="vazio">Marque os canais na parte 1.</p></div>
       </div>
     </fieldset>
@@ -309,7 +332,7 @@
         <span class="dica">Com quantidade e receita de cada produto no período.</span>
         <input type="file" id="f-prod" name="Produtos" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
       <div class="arquivo"><label class="t" for="f-cat">Lista de produtos com o custo de cada um</label>
-        <span class="dica">SKU ou nome, quanto você paga por unidade e, se tiver, o estoque.</span>
+        <span class="dica">SKU ou nome, quanto você paga por unidade e o estoque de cada um. É com o estoque que mostramos o que está parado.</span>
         <input type="file" id="f-cat" name="Custos dos produtos" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
     </fieldset>
 
@@ -318,9 +341,10 @@
       <legend><span class="n">5</span>Marketing <span class="nivel opc">Opcional</span></legend>
             <div class="campo">
         <span class="t">Investe em anúncios?</span>
+        <span class="dica">Vale anúncio dentro dos marketplaces e fora deles (Instagram, Google). Se a loja anuncia, marque Sim: esse gasto entra na conta do resultado.</span>
         <div class="chips">
           <label><input type="radio" name="grp-mkt" value="sim" data-abre="mkt"><span>Sim</span></label>
-          <label><input type="radio" name="grp-mkt" value="nao" data-fecha="mkt" checked><span>Não</span></label>
+          <label><input type="radio" name="grp-mkt" value="nao" data-fecha="mkt"><span>Não</span></label>
         </div>
       </div>
       <div class="condicional" id="mkt">
@@ -328,7 +352,7 @@
           <span class="dica">Planilha ou print de cada plataforma mostrando investimento e vendas do período.</span>
           <input type="file" id="f-ads" name="Anuncios" multiple accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg"></div>
         <span class="t" style="margin-top:6px">Ou preencha mês a mês <span class="opc">(o que souber)</span></span>
-        <span class="dica">Escolha onde você anuncia. Não sabe o valor de cada mês? Preencha só o total do período.</span>
+        <span class="dica">Escolha onde você anuncia. Não sabe o valor de cada mês? Preencha só o total do período. Já informou os anúncios de cada canal na parte 3? Não repita em Marketplace Ads.</span>
         <div class="chips" id="plataformas" data-junta="h-plataformas">
           <label><input type="checkbox" value="Meta Ads"><span>Meta Ads</span></label>
           <label><input type="checkbox" value="Google Ads"><span>Google Ads</span></label>
@@ -364,9 +388,10 @@
     <!-- 7 ---------------------------------------------------------------->
     <fieldset>
       <legend><span class="n">7</span>Caixa <span class="nivel opc">Opcional</span></legend>
+      <p class="ajuda-sec"><b>Sem o extrato, a pergunta "O dinheiro em conta dá para quanto tempo?" não entra no seu Diagnóstico.</b> Essa análise é feita com o que de fato entrou e saiu da conta, não com valores aproximados. O envio é opcional: as outras perguntas são respondidas normalmente.</p>
       <p class="ajuda-sec">Pode mandar em OFX, CSV, PDF ou Excel.</p>
       <div class="arquivo"><label class="t" for="f-ext">Extratos bancários do período</label>
-        <span class="dica">OFX é o melhor. De todas as contas da loja.</span>
+        <span class="dica">OFX é o melhor. De todas as contas da loja, cobrindo os meses do período.</span>
         <input type="file" id="f-ext" name="Extratos" multiple accept=".ofx,.csv,.xlsx,.xls,.pdf"></div>
       <div class="arquivo"><label class="t" for="f-cart">Extratos de carteiras e contas de recebimento</label>
         <span class="dica">Mercado Pago, PagBank, Stone, gateway do site…</span>
@@ -402,10 +427,21 @@
       <div class="campo"><label class="t" for="ctx">Conte o que aconteceu <span class="opc">(e quando)</span></label>
         <textarea id="ctx" name="Contexto da operação" placeholder="ex.: Em julho fiz uma promoção de 20% no Mercado Livre e faltou o produto mais vendido por duas semanas."></textarea></div>
       <div class="campo"><label class="t" for="duv">Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?</label>
-        <span class="dica">Vamos responder isso no seu relatório.</span>
+        <span class="dica">Vamos responder isso no seu relatório. Em branco, essa parte não entra.</span>
         <textarea id="duv" name="Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?"
                   placeholder="ex.: Consigo aumentar meu pró-labore? Por que vendo bem e nunca sobra dinheiro?"></textarea></div>
     </fieldset>
+
+    <!-- situação: o que o Diagnóstico vai conseguir responder com o que foi preenchido -->
+    <div class="situacao" id="situacao" data-nivel="falta" aria-live="polite">
+      <div class="st-rot">Como está o seu formulário</div>
+      <div class="st-barra" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <h3 id="st-titulo"></h3>
+      <p id="st-texto"></p>
+      <ul id="st-lista"></ul>
+      <label class="st-ok" id="st-ok"><input type="checkbox" id="st-ciente"><span id="st-ciente-txt"></span></label>
+    </div>
+    <input type="hidden" name="Situação do formulário" id="h-situacao">
 
     <p class="tamanho" id="tamanho"></p>
     <div class="enviar">
@@ -437,6 +473,10 @@
       if (!r.checked || r.disabled) return;
       (r.dataset.fecha || "").split(" ").filter(Boolean).forEach(function (id) { ajustar(id, false); });
       (r.dataset.abre || "").split(" ").filter(Boolean).forEach(function (id) { ajustar(id, true); });
+    });
+    // pergunta de sim ou não ainda sem resposta: o bloco que ela abre fica fechado
+    F.$$("input[type=radio][data-abre]").forEach(function (r) {
+      if (!F.$$('input[name="' + r.name + '"]:checked').length) r.dataset.abre.split(" ").filter(Boolean).forEach(function (id) { ajustar(id, false); });
     });
   };
   document.addEventListener("change", function (e) {
@@ -509,6 +549,8 @@
         return;
       }
       // o e-mail só leva o que foi respondido
+      var mkt = F.$('input[name="grp-mkt"]:checked');
+      document.getElementById("h-investe").value = mkt ? (mkt.value === "sim" ? "Sim" : "Não") : "Não respondeu";
       F.$$('input[name^="grp-"]').forEach(function (r) { r.disabled = true; });
       F.$$("input[type=text], input[type=email], input[type=tel], input[type=url], select, textarea", this).forEach(function (c) {
         if (!c.name || c.name.charAt(0) === "_") return;
@@ -571,7 +613,7 @@
       F.sincronizar();
       b.disabled = false; b.textContent = "Enviar para a Finspots";
       box.innerHTML = "Não conseguimos enviar agora. Suas respostas continuam salvas neste aparelho: tente de novo em alguns minutos"
-        + " ou <a href=\"https://wa.me/5562996653913?text=Oi!%20Tive%20um%20problema%20para%20enviar%20o%20formul%C3%A1rio.\">chame no WhatsApp</a>.";
+        + " ou <a href=\"https://wa.me/5562996677168?text=Oi!%20Tive%20um%20problema%20para%20enviar%20o%20formul%C3%A1rio.\">chame no WhatsApp</a>.";
     });
   };
 
@@ -889,6 +931,66 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
   atualizarPeriodo();
 
   F.autosalvar("finspots-form-diagnostico", function () { montarCanais(); atualizarPeriodo(); });
+  // ---------- situação do formulário: o que o Diagnóstico vai conseguir responder com o que foi preenchido
+  // completo (verde) · só falta o que é opcional para a maioria: marketing e a sua pergunta (verde claro) ·
+  // faltam perguntas (amarelo, com a lista) · falta o essencial (vermelho)
+  function situacao() {
+    var arq = F.temArquivo, tem = function (sel) { return $$(sel).some(function (i) { return !i.disabled && i.value.trim(); }); };
+    var modoFin = ($('input[name="grp-fin"]:checked') || {}).value, modoVen = ($('input[name="grp-ven"]:checked') || {}).value;
+    var finOk = modoFin === "arquivo" ? arq("#f-dre")
+              : $$("#paineis-fin .painel-mes").length > 0 && $$('#paineis-fin input[name$="· Faturamento bruto"]').every(function (i) { return i.value.trim(); });
+    var venOk = modoVen === "arquivo" ? arq("#f-vendas")
+              : $$('#grade-vendas input[name$="· Pedidos"]').length > 0 && $$('#grade-vendas input[name$="· Pedidos"]').every(function (i) { return i.value.trim(); });
+    var relVendas = arq("#f-vendas");
+    var canais = $("#h-canais").value ? $("#h-canais").value.split(", ") : [];
+    var canaisOk = canais.length > 0 && (relVendas || $$('#canais-detalhe input[name$="· Receita"]').every(function (i) { return i.value.trim(); }));
+    var mkt = ($('input[name="grp-mkt"]:checked') || {}).value;
+    var mktDados = arq("#f-ads") || tem("#grade-mkt input") || tem('#canais-detalhe input[name$="· Investimento em anúncios"]');
+    var falta = [], leve = [];
+    if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["03 · O dinheiro em conta dá para quanto tempo?", "Depende do extrato bancário do período (parte 7)."]);
+    if (!canaisOk) falta.push(["05 · Quais canais realmente deixam lucro? e 10 · Qual é a meta de faturamento para investir em anúncios?",
+                               canais.length ? "Dependem do relatório de vendas de cada canal ou da receita de cada canal (parte 3)." : "Dependem dos canais de venda marcados na parte 1."]);
+    if (!relVendas && !arq("#f-prod")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro?", "Depende do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
+    else if (!arq("#f-cat")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro? (sai sem a sobra de cada produto)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
+    if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["07 · Meus clientes voltam?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
+    if (mkt === "sim" && !mktDados) falta.push(["08 e 09 · As perguntas sobre os anúncios", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
+    if (mkt !== "sim") leve.push(["08 e 09 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
+    if (!tem("#duv")) leve.push(["A sua pergunta", "Em branco, essa parte não entra (parte 9)."]);
+    var nivel = !finOk || !venOk ? "falta" : falta.length ? "parcial" : leve.length ? "quase" : "completo";
+    return { nivel: nivel, finOk: finOk, venOk: venOk, falta: falta, leve: leve };
+  }
+  var ST = {
+    completo: ["Tudo certo: o seu Diagnóstico vem completo.", "Com o que você preencheu, as 10 perguntas e a sua pergunta serão respondidas.",
+               "Estou ciente de que o meu Diagnóstico será feito com as informações deste formulário."],
+    quase: ["Quase tudo: só fica de fora o que é opcional.", "As perguntas de Financeiro e Vendas serão respondidas. O que não entra está abaixo.",
+            "Estou ciente de que o meu Diagnóstico será feito sem os itens listados acima."],
+    parcial: ["Atenção: algumas perguntas não serão respondidas.", "Com o que foi preenchido até aqui, as perguntas abaixo ficam de fora. Para incluí-las, volte à parte indicada.",
+              "Estou ciente de que o meu Diagnóstico será feito sem as perguntas listadas acima."],
+    falta: ["Falta o essencial para fazer o Diagnóstico.", "Preencha o resultado financeiro (parte 2) e as vendas (parte 3) para poder enviar.", ""]
+  };
+  var stAntes = "";
+  function atualizarSituacao() {
+    F.juntar();
+    var s = situacao(), box = $("#situacao"), t = ST[s.nivel];
+    var itens = s.nivel === "falta" ? [] : s.falta.concat(s.leve);
+    box.dataset.nivel = s.nivel;
+    $("#st-titulo").textContent = t[0];
+    $("#st-texto").textContent = t[1];
+    $("#st-lista").innerHTML = itens.map(function (x) { return "<li><b>" + x[0] + "</b>" + x[1] + "</li>"; }).join("");
+    $("#st-ok").style.display = s.nivel === "falta" ? "none" : "";
+    $("#st-ciente-txt").textContent = t[2];
+    var resumo = s.nivel === "completo" ? "Completo" : s.nivel === "falta" ? "Falta o essencial"
+               : "Sem: " + itens.map(function (x) { return x[0].split(" · ")[0]; }).join("; ");
+    if (s.nivel + resumo !== stAntes) { $("#st-ciente").checked = false; stAntes = s.nivel + resumo; }      // mudou o que entra: a pessoa confirma de novo
+    $("#h-situacao").value = resumo;
+    return s;
+  }
+  var stTempo;
+  ["input", "change"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { if (e.target.id === "st-ciente") return; clearTimeout(stTempo); stTempo = setTimeout(atualizarSituacao, 150); });
+  });
+  atualizarSituacao();
+
   somarMkt();
   $$('#grade-forn [data-forn]').forEach(function (b) {     // fornecedores preenchidos antes voltam visíveis
     if ($$("input", b).some(function (i) { return i.value.trim(); })) b.style.display = "";
@@ -916,6 +1018,8 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     if (modoVen === "arquivo" && !F.temArquivo("#f-vendas")) e.push("Parte 3: anexe o relatório de vendas (ou escolha preencher aqui).");
     if (modoVen === "mao" && $$('#grade-vendas input[name$="· Pedidos"]').some(function (i) { return !i.value.trim(); }))
       e.push("Parte 3: número de pedidos de cada mês.");
+    var st = atualizarSituacao();
+    if (!e.length && st.nivel !== "falta" && !$("#st-ciente").checked) e.push("Marque a confirmação no quadro \"Como está o seu formulário\", acima do botão.");
     return e;
   }, function () {
     juntarEventos();
