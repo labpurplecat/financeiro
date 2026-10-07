@@ -111,9 +111,14 @@
 
   /* ---------- Cabeçalho ---------- */
 
-  header { position: sticky; top: 0; z-index: 900; padding: 20px 0; background: #02021b; border-bottom: 1px solid var(--borda); }
-  html { scroll-padding-top: 100px; }
-  .header-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+  header { position: sticky; top: 0; z-index: 900; padding: 0; background: #02021b; border-bottom: 1px solid var(--borda); }
+  html { scroll-padding-top: 134px; }
+  .faixa-topo { background: var(--laranja); color: var(--azul); overflow: hidden; white-space: nowrap; padding: 7px 0; font-size: 13px; font-weight: 600; line-height: 1.5; }
+  .faixa-trilho { display: inline-flex; animation: faixa-rolando 60s linear infinite; }
+  .faixa-trilho span { padding-right: 56px; }
+  @keyframes faixa-rolando { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .faixa-trilho { animation: none; } }
+  .header-inner { max-width: 1040px; margin: 0 auto; padding: 20px 24px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
   .nav-links { display: flex; gap: 26px; font-size: 14px; align-items: center; }
   .nav-links > a { text-decoration: none; color: var(--suave); }
   .nav-links > a:hover { color: var(--branco); }
@@ -476,6 +481,7 @@
 <div id="bg-fundo" aria-hidden="true"></div>
 
 <header>
+  <div class="faixa-topo"><div class="faixa-trilho"><span>Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span><span aria-hidden="true">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</span></div></div>
   <div class="header-inner">
     <a href="index.html" class="logo"><img src="assets/img/finspots-logo.png" alt="Finspots"></a>
     <a href="#oferta" class="btn btn-primario btn-header">Quero o meu Diagnóstico</a>
