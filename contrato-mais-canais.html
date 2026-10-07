@@ -81,6 +81,20 @@ font-size: 13.5px; color: var(--suave); margin-bottom: 24px; cursor: pointer;
 }
 .aceite input { margin-top: 3px; accent-color: var(--laranja); flex-shrink: 0; }
 
+.dados-grade { display: grid; gap: 14px; margin-top: 14px; }
+.dados-grade label { display: block; font-size: 13px; color: var(--suave); margin-bottom: 5px; }
+.dados-grade input {
+width: 100%; font-family: inherit; font-size: 15px; color: var(--branco); background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.16); border-radius: 9px; padding: 12px 13px;
+}
+.dados-grade input:focus { outline: 2px solid var(--laranja); outline-offset: 1px; }
+.isca { position: absolute; left: -9999px; }
+.aviso { text-align: left; font-size: 13.5px; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; display: none; }
+.aviso.erro { display: block; color: #FFB4B4; border: 1px solid #FF364E; background: rgba(255,54,78,0.10); }
+.aviso.erro ul { margin: 6px 0 0 18px; }
+#pronto { display: none; }
+#pronto .contrato-caixa { text-align: center; }
+.btn-linha { background: transparent; color: var(--branco); border: 1.5px solid rgba(255,255,255,0.35); margin-bottom: 12px; }
 .nota-checkout { font-size: 11.5px; color: var(--fraco); text-align: center; margin-top: 10px; }
 
 footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fraco); }
@@ -104,7 +118,7 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 
 <section class="central">
 <div class="wrap-estreito">
-<h1>Antes de continuar, confirme os termos</h1>
+<h1>Antes de continuar, confira o seu contrato</h1>
 
 <div class="contrato-caixa">
 <div class="caixa-head">
@@ -115,7 +129,7 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 <p style="margin-top:12px;">Você recebe:</p>
 <ul class="lista-check">
 <li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span><b style="color:var(--branco);">Até 10 perguntas respondidas</b>, em Financeiro, Vendas e Marketing</span></li>
-<li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Análise de <b style="color:var(--branco);">todos os canais de venda combinados no orçamento</b></span></li>
+<li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Análise de <b style="color:var(--branco);"><span id="txt-canais">todos os canais de venda combinados no orçamento</span></b></span></li>
 <li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>A <b style="color:var(--branco);">trajetória da loja</b>, mês a mês</span></li>
 <li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span>Em cada resposta: <b style="color:var(--branco);">os números, o motivo e o que pode acontecer</b>, com passo a passo em cada prioridade</span></li>
 <li><span class="check-marca"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><span><b style="color:var(--branco);">Até 3 prioridades</b>, em ordem</span></li>
@@ -128,15 +142,15 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 <span class="icone"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
 <h2>Investimento</h2>
 </div>
-<p><span class="preco-destaque">Valor do seu orçamento</span>, em pagamento único.</p>
-<p style="font-size:13.5px; color:var(--fraco); margin-top:6px;">O valor é o combinado no orçamento enviado pelo WhatsApp e aparece na página de pagamento · De 3 a 6 meses analisados · Canais conforme o orçamento</p>
+<p><span class="preco-destaque" id="txt-valor">Valor do seu orçamento</span>, em pagamento único.</p>
+<p style="font-size:13.5px; color:var(--fraco); margin-top:6px;"><span id="txt-resumo">O valor é o combinado no orçamento enviado pelo WhatsApp e aparece na página de pagamento · De 3 a 6 meses analisados · Canais conforme o orçamento</span></p>
 <p style="font-size:13px; color:var(--fraco); margin-top:6px;">O caixa entra quando você envia o extrato bancário, os produtos entram com os relatórios de vendas e a lista de custos, e o marketing entra com os dados de anúncios. O que não for enviado aparece no relatório como análise não realizada.</p>
 
 <div class="caixa-head">
 <span class="icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
 <h2>Prazo de entrega</h2>
 </div>
-<p>O diagnóstico será entregue em até <b style="color:var(--branco);">15 dias úteis</b> após a confirmação do pagamento e o recebimento completo dos dados necessários.</p>
+<p>O diagnóstico será entregue em até <b style="color:var(--branco);" id="txt-prazo">15 dias úteis</b> após a confirmação do pagamento e o recebimento completo dos dados necessários.</p>
 
 <div class="caixa-head">
 <span class="icone"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>
@@ -145,13 +159,59 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 <p>Você tem <b style="color:var(--branco);">7 dias de garantia, contados a partir da entrega do diagnóstico</b>. Se, dentro desse período, entender que o diagnóstico não entregou a clareza esperada, é só pedir pelo WhatsApp e devolvemos 100% do valor pago.</p>
 </div>
 
+<div id="etapa-aceite">
+<div class="contrato-caixa" style="margin-top:0;">
+<div class="caixa-head">
+<span class="icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+<h2>Seus dados para o contrato</h2>
+</div>
+<p>Eles identificam quem está contratando e aparecem no PDF do contrato.</p>
+<div class="dados-grade">
+<div><label for="c-nome">Nome completo</label><input type="text" id="c-nome" autocomplete="name" maxlength="120"></div>
+<div><label for="c-loja">Nome da loja</label><input type="text" id="c-loja" autocomplete="organization" maxlength="120"></div>
+<div><label for="c-doc">CPF ou CNPJ</label><input type="text" id="c-doc" inputmode="text" maxlength="20" placeholder="000.000.000-00 ou 00.000.000/0000-00"></div>
+<div><label for="c-email">E-mail (para receber a cópia do contrato)</label><input type="email" id="c-email" autocomplete="email" maxlength="120"></div>
+<input type="text" id="c-site" class="isca" tabindex="-1" autocomplete="off" aria-hidden="true">
+</div>
+<p id="alterar" style="display:none; margin-top:12px;"><a href="#" id="lnk-alterar" style="color:var(--laranja); text-decoration:underline;">Alterar meus dados</a></p>
+</div>
+
+<div class="aviso" id="aviso" role="alert"></div>
+
+<div id="passo-gerar">
+<button type="button" class="btn btn-primario" id="btn-gerar">Gerar meu contrato para leitura</button>
+<p class="nota-checkout">Montamos o contrato em PDF com os seus dados para você ler antes de concordar.</p>
+</div>
+
+<div id="passo-ler" style="display:none;">
+<div class="contrato-caixa" style="margin-top:0;">
+<div class="caixa-head">
+<span class="icone"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>
+<h2>Seu contrato está pronto para leitura</h2>
+</div>
+<p>Ele traz os seus dados, o valor, os canais, o prazo e as Condições de Contratação completas.</p>
+<a class="btn btn-linha" id="btn-abrir" href="#" target="_blank" rel="noopener" style="margin-top:14px;">Abrir o contrato (PDF)</a>
+<a class="btn btn-linha" id="btn-baixar" href="#" download style="margin-bottom:0;">Baixar o contrato</a>
+</div>
+
 <label class="aceite">
 <input type="checkbox" id="aceite-termos">
-<span>Li e concordo com os termos acima e com as <a href="condicoes-contratacao-mais-canais.html" target="_blank" style="color:var(--laranja); text-decoration:underline;">Condições de Contratação</a> completas.</span>
+<span>Li o contrato e concordo com os seus termos e com as <a href="condicoes-contratacao-mais-canais.html" target="_blank" style="color:var(--laranja); text-decoration:underline;">Condições de Contratação</a> completas.</span>
 </label>
 
-<a class="btn btn-primario" id="btn-continuar" href="https://pay.kiwify.com.br/E9udSUM" aria-disabled="true">Concordo, continuar</a>
-<p class="nota-checkout">Próximo passo: pagamento seguro pela Kiwify. Depois você envia os dados da sua loja.</p>
+<button type="button" class="btn btn-primario" id="btn-continuar" aria-disabled="true">Concordo, ir para o pagamento</button>
+<p class="nota-checkout">Ao confirmar, registramos o seu aceite e enviamos o contrato para o seu e-mail. Depois vem o pagamento seguro pela Kiwify.</p>
+</div>
+</div>
+
+<div id="pronto">
+<div class="contrato-caixa" style="margin-top:0;">
+<h2 style="font-size:18px; margin-top:0;">Contrato registrado</h2>
+<p>Contrato nº <b style="color:var(--branco);" id="num-contrato"></b>. Enviamos uma cópia para <b style="color:var(--branco);" id="email-contrato"></b>.</p>
+</div>
+<a class="btn btn-primario" id="btn-pagar" href="https://pay.kiwify.com.br/E9udSUM">Ir para o pagamento</a>
+<p class="nota-checkout">Você será levado ao pagamento em instantes. Pagamento seguro pela Kiwify. Depois você envia os dados da sua loja.</p>
+</div>
 
 <p style="margin-top:28px; font-size:13px;">Ficou com dúvida antes de continuar? <a href="https://wa.me/5562996653913" target="_blank" rel="noopener" style="color:var(--laranja); text-decoration:underline;">Chama no WhatsApp</a></p>
 </div>
@@ -160,19 +220,103 @@ footer { padding: 30px 0; text-align: center; font-size: 12.5px; color: var(--fr
 <footer>Finspots | Entregamos respostas, não planilhas.</footer>
 
 <script>
-var check = document.getElementById('aceite-termos');
-var btn = document.getElementById('btn-continuar');
+var ENDPOINT = "https://script.google.com/macros/s/AKfycbxn9QSx3DdmdovfXd8we6a8EgyvOfSGf6RaWGXZ30sxKy-RJrWdQ75JeGXciLQl3FUB/exec";
+var TIPO = "mais-canais";
+var $ = function (id) { return document.getElementById(id); };
+var check = $('aceite-termos'), btn = $('btn-continuar'), aviso = $('aviso');
 
-function atualizarBotao() {
-  btn.setAttribute('aria-disabled', check.checked ? 'false' : 'true');
+// valor e canais chegam pelo link do orçamento: contrato-mais-canais.html?valor=1200&canais=5
+var q = new URLSearchParams(location.search);
+var valor = Number((q.get('valor') || '').replace(',', '.')), canais = parseInt(q.get('canais'), 10);
+var prazo = parseInt(q.get('prazo'), 10);
+if (!(prazo >= 5 && prazo <= 90)) prazo = 0;
+if (prazo) $('txt-prazo').textContent = prazo + ' dias úteis';
+var orcamentoOk = valor >= 100 && valor <= 100000 && canais >= 4 && canais <= 40;
+if (orcamentoOk) {
+  var brl = 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  $('txt-canais').textContent = canais + ' canais de venda';
+  $('txt-valor').textContent = brl;
+  $('txt-resumo').textContent = 'Valor combinado no seu orçamento · De 3 a 6 meses analisados · ' + canais + ' canais de venda';
 }
+
+var CAMPOS = ['c-nome', 'c-loja', 'c-doc', 'c-email'];
+var lido = null;      // dados com que o contrato de leitura foi gerado
+
+function atualizarBotao() { btn.setAttribute('aria-disabled', check.checked && lido ? 'false' : 'true'); }
 check.addEventListener('change', atualizarBotao);
-// Ao voltar pelo navegador, a caixinha pode vir marcada: sincroniza o botão.
 window.addEventListener('pageshow', atualizarBotao);
 atualizarBotao();
 
-btn.addEventListener('click', function (ev) {
-  if (!check.checked) ev.preventDefault();
+function erro(lista) {
+  aviso.className = 'aviso erro';
+  aviso.innerHTML = lista.length > 1 ? 'Falta pouco:<ul>' + lista.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' : lista[0];
+  aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+var ZAP = ' <a href="https://wa.me/5562996653913" target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a>.';
+
+function lerCampos() {
+  var d = { tipo: TIPO, nome: $('c-nome').value.trim(), loja: $('c-loja').value.trim(),
+            documento: $('c-doc').value.trim(), email: $('c-email').value.trim(), site: $('c-site').value };
+  var e = [], n = d.documento.replace(/[^0-9A-Za-z]/g, '').length;
+  if (!orcamentoOk) return { erros: ['Este link está sem o valor e os canais do seu orçamento. Peça o link certo pelo WhatsApp.' + ZAP] };
+  if (d.nome.length < 5 || d.nome.indexOf(' ') < 0) e.push('Informe o nome completo.');
+  if (d.loja.length < 2) e.push('Informe o nome da loja.');
+  if (n !== 11 && n !== 14) e.push('Informe um CPF (11 dígitos) ou CNPJ (14 dígitos).');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) e.push('Informe um e-mail válido.');
+  d.valor = String(valor); d.canais = String(canais); if (prazo) d.prazo = String(prazo);
+  return e.length ? { erros: e } : { dados: d };
+}
+function enviar(d) {
+  return fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (!j || !j.ok) throw new Error((j && j.erro) || ''); return j; });
+}
+function falha(x, padrao) { erro([(x && x.message ? x.message : padrao) + ZAP]); }
+function travar(sim) { CAMPOS.forEach(function (id) { $(id).readOnly = sim; $(id).style.opacity = sim ? '0.7' : ''; }); }
+
+// 1) gera o contrato em PDF para leitura (nada é registrado nem enviado ainda)
+var btnGerar = $('btn-gerar');
+btnGerar.addEventListener('click', function () {
+  var r = lerCampos();
+  if (r.erros) return erro(r.erros);
+  aviso.className = 'aviso'; btnGerar.disabled = true; btnGerar.textContent = 'Montando o seu contrato…';
+  r.dados.acao = 'previa';
+  enviar(r.dados).then(function (j) {
+    var bytes = Uint8Array.from(atob(j.pdf), function (ch) { return ch.charCodeAt(0); });
+    var url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+    $('btn-abrir').href = url; $('btn-baixar').href = url; $('btn-baixar').download = j.nomeArquivo;
+    lido = r.dados; travar(true);
+    $('passo-gerar').style.display = 'none'; $('alterar').style.display = 'block';
+    $('passo-ler').style.display = 'block';
+    atualizarBotao();
+    $('passo-ler').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }).catch(function (x) { falha(x, 'Não conseguimos montar o contrato agora. Tente de novo em alguns minutos.'); })
+    .then(function () { btnGerar.disabled = false; btnGerar.textContent = 'Gerar meu contrato para leitura'; });
+});
+// mudou os dados: o contrato precisa ser gerado e lido de novo
+$('lnk-alterar').addEventListener('click', function (ev) {
+  ev.preventDefault();
+  lido = null; check.checked = false; travar(false); atualizarBotao();
+  $('passo-ler').style.display = 'none'; $('alterar').style.display = 'none'; $('passo-gerar').style.display = 'block';
+  $('c-nome').focus();
+});
+
+// 2) registra o aceite, envia o contrato por e-mail e segue para o pagamento
+btn.addEventListener('click', function () {
+  if (!check.checked || !lido || btn.disabled) return;
+  var d = Object.assign({}, lido, { acao: 'aceite', aceite: true });
+  aviso.className = 'aviso'; btn.disabled = true; btn.textContent = 'Registrando o seu aceite…';
+  enviar(d).then(function (j) {
+    $('num-contrato').textContent = j.numero;
+    $('email-contrato').textContent = d.email;
+    $('etapa-aceite').style.display = 'none';
+    $('pronto').style.display = 'block';
+    $('pronto').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(function () { location.href = $('btn-pagar').href; }, 3500);
+  }).catch(function (x) {
+    btn.disabled = false; btn.textContent = 'Concordo, ir para o pagamento';
+    falha(x, 'Não conseguimos registrar o aceite agora. Tente de novo em alguns minutos.');
+  });
 });
 </script>
 </body>
