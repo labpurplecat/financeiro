@@ -30,6 +30,12 @@
   .pilulas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
   .pilula { font-size: 12.5px; border-radius: 999px; padding: 4px 12px; background: var(--laranja-fraco); color: var(--laranja); }
   .pilula.cinza { background: rgba(255,255,255,.06); color: var(--suave); }
+  .video-tutorial { margin: 18px 0 22px; }
+  .video-tutorial p { color: var(--suave); margin-bottom: 12px; }
+  .video-tutorial p strong { color: var(--branco); font-weight: 600; }
+  .video-quadro { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
+                  border: 1px solid var(--borda); background: var(--quase-preto); }
+  .video-quadro iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
   fieldset { border: 1px solid var(--borda); border-radius: 16px; padding: 24px 20px 8px; margin-top: 26px;
              background: rgba(0,3,27,0.55); backdrop-filter: blur(4px); min-width: 0; }
@@ -180,6 +186,12 @@
   </header>
 
   <h1>Vamos começar o seu <span>diagnóstico</span></h1>
+  <div class="video-tutorial">
+    <p><strong>Antes de começar, assista a este vídeo rápido.</strong> Nele eu mostro o passo a passo de como preencher o formulário e onde encontrar cada informação, para você responder com tranquilidade.</p>
+    <div class="video-quadro">
+      <iframe src="https://www.youtube-nocookie.com/embed/Pbo-Thg1SIE?rel=0" title="Tutorial: como preencher o formulário do diagnóstico" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+  </div>
   <p class="intro">Responda com calma e do seu jeito. Tem relatório pronto do sistema? É só anexar. Prefere digitar? Preencha os campos. O que você não tiver, pode deixar em branco.</p>
   <div class="pilulas">
     <span class="pilula">Essencial: dados da loja, período, regime, resultado e vendas</span>
