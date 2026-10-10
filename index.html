@@ -403,6 +403,8 @@
   .exemplo-slot iframe { aspect-ratio: 16/9; height: auto; }
   .exemplo-slot h3 { font-size: 16px; font-weight: 600; }
   .central .exemplo-slot p { font-size: 13.5px; color: var(--fraco); margin: 0; max-width: 280px; }
+  .foto-entrega { position: relative; left: 50%; transform: translateX(-50%); width: min(960px, calc(100vw - 48px)); margin-top: 36px; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 69, 0, 0.35); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+  .foto-entrega img { width: 100%; height: auto; display: block; }
   .aviso-ficticio { font-size: 13px; color: var(--fraco); font-style: italic; margin-top: 18px; }
 
   /* ---------- Garantia em destaque ---------- */
@@ -503,9 +505,6 @@
     <div class="cta-area">
       <a href="contrato.html" class="btn btn-primario">Quero o meu Diagnóstico →</a>
       <div class="legenda">Diagnóstico Financeiro · Análise personalizada · PDF + vídeo · Garantia de 7 dias</div>
-      <div class="cta-meio" style="margin-top:18px;">
-        <a href="#exemplo" class="btn btn-secundario">Ver um exemplo</a>
-      </div>
     </div>
   </div>
 </section>
@@ -631,7 +630,6 @@
     <p class="nota-transparencia">A análise é completa quando os dados são completos. Se algum dado não for enviado, a pergunta que depende dele aparece como não realizada, com o motivo. Nada é inventado para preencher espaço.</p>
     <div class="cta-meio">
       <a href="contrato.html" class="btn btn-primario">Quero o meu Diagnóstico →</a>
-      <a href="#exemplo" class="btn btn-secundario">Ver um exemplo</a>
     </div>
   </div>
 </section>
@@ -657,6 +655,8 @@
   <div class="wrap-estreito">
     <h2>Você não recebe uma pilha de números.</h2>
     <p class="lead" style="color:var(--branco); margin-top:8px;">Recebe respostas que consegue usar.</p>
+
+    <figure class="foto-entrega"><img src="assets/img/diagnostico-entrega.webp" alt="Prévia do Diagnóstico Financeiro Finspots: o PDF personalizado com os números da loja e o vídeo narrado que explica a mesma análise em linguagem simples" width="1600" height="901" loading="lazy"></figure>
 
     <div class="lista-icones" style="text-align:left; margin-top:44px;">
       <div class="item-icone">
@@ -688,45 +688,8 @@
   </div>
 </section>
 
-<!-- 08 - EXEMPLO DO DIAGNÓSTICO -->
-<section class="bg-fundo central" id="exemplo">
-  <div class="wrap">
-    <div class="kicker">Veja antes de contratar</div>
-    <h2>Veja como é o Diagnóstico que você recebe.</h2>
-    <p style="margin-top:16px;">Este é um exemplo completo, feito para uma loja modelo. É exatamente o formato que você vai receber, com os números da sua operação.</p>
-
-    <div class="exemplo-grid">
-      <!-- ESPAÇO PARA O PDF DE EXEMPLO:
-           Suba o arquivo em assets/exemplo/diagnostico-exemplo.pdf e uma imagem da capa em assets/exemplo/capa-exemplo.webp.
-           Depois troque o conteúdo desta div por:
-           <a href="assets/exemplo/diagnostico-exemplo.pdf" target="_blank" rel="noopener"><img src="assets/exemplo/capa-exemplo.webp" alt="Capa do diagnóstico de exemplo"></a>
-           <a href="assets/exemplo/diagnostico-exemplo.pdf" target="_blank" rel="noopener" class="btn btn-primario">Abrir o PDF de exemplo</a> -->
-      <div class="exemplo-slot">
-        <a href="https://drive.google.com/file/d/1NPhP76qSXpuL-HtNZHvl2cU_1stR_EX7/view" target="_blank" rel="noopener" style="width:100%;"><img src="assets/exemplo/capa-exemplo.jpg" alt="Capa do diagnóstico de exemplo" loading="lazy"></a>
-        <h3>PDF de exemplo</h3>
-        <p>O relatório completo de uma loja modelo, página por página.</p>
-        <a href="https://drive.google.com/file/d/1NPhP76qSXpuL-HtNZHvl2cU_1stR_EX7/view" target="_blank" rel="noopener" class="btn btn-primario" style="background:#7188d6; color:var(--azul);">Abrir o PDF de exemplo</a>
-      </div>
-      <!-- ESPAÇO PARA O VÍDEO DE EXEMPLO:
-           Troque o conteúdo desta div por:
-           <iframe src="https://www.youtube-nocookie.com/embed/CODIGO_DO_VIDEO?rel=0" title="Vídeo de exemplo do diagnóstico" loading="lazy" allowfullscreen></iframe> -->
-      <div class="exemplo-slot">
-        <iframe src="https://www.youtube-nocookie.com/embed/ubDNdxY1l24?rel=0" title="Vídeo de exemplo do diagnóstico" loading="lazy" allowfullscreen></iframe>
-        <h3>Vídeo narrado de exemplo</h3>
-        <p>O Diagnóstico de uma loja modelo, apresentado card a card.</p>
-      </div>
-    </div>
-    <p class="aviso-ficticio">Exemplo ilustrativo com dados fictícios de uma loja modelo.</p>
-
-    <div class="cta-meio">
-      <a href="contrato.html" class="btn btn-primario">Quero o Diagnóstico da minha loja →</a>
-      <a href="https://wa.me/5562996653913?text=Oi!%20Quero%20saber%20mais%20sobre%20o%20Diagn%C3%B3stico%20Financeiro%20Finspots." target="_blank" rel="noopener" class="btn btn-secundario">Tirar dúvidas no WhatsApp</a>
-    </div>
-  </div>
-</section>
-
 <!-- 09 - PARA QUEM É -->
-<section class="central">
+<section class="bg-fundo central">
   <div class="wrap-estreito">
     <h2>Você tem os números.<br>Mas tem tempo para analisar tudo?</h2>
     <p style="margin-top:20px;">O Diagnóstico Financeiro é para você se:</p>
@@ -747,7 +710,7 @@
 </section>
 
 <!-- 10 - OFERTA -->
-<section class="bg-fundo central" id="oferta">
+<section class="central" id="oferta">
   <div class="wrap-estreito">
     <h2>Descubra o que está acontecendo com o seu e-commerce.</h2>
     <div class="card-oferta">
@@ -789,21 +752,6 @@
         <h3>Sua loja vende em mais de 3 canais?</h3>
         <p>O Diagnóstico desta página analisa até 3 canais de venda. Para analisar todos os canais da sua loja juntos, fale com a gente: montamos um orçamento para a sua operação.</p>
         <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%203%20canais%20e%20quero%20um%20or%C3%A7amento%20do%20Diagn%C3%B3stico%20Financeiro." target="_blank" rel="noopener" class="btn btn-secundario">Pedir orçamento no WhatsApp</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 10b - A CADA TRIMESTRE -->
-<section class="central" id="trimestre">
-  <div class="wrap-estreito wrap-foto">
-    <div class="kicker">A cada trimestre</div>
-    <h2>Um Diagnóstico mostra onde a loja está. O próximo mostra se ela mudou.</h2>
-    <div class="foto-lado">
-      <figure class="grafico"><figcaption>O que mudou de um trimestre para o outro</figcaption><svg viewBox="0 0 320 214" role="img" aria-label="Gráfico comparando o trimestre anterior com o trimestre atual: dois indicadores melhoraram e um ainda pede atenção"><rect x="28" y="8" width="10" height="10" rx="2" fill="#6B76A8" fill-opacity="0.75"/><text x="44" y="17" font-size="11" fill="#D8E1F6">Trimestre anterior</text><rect x="172" y="8" width="10" height="10" rx="2" fill="#ff4500"/><text x="188" y="17" font-size="11" fill="#D8E1F6">Trimestre atual</text><line x1="8" y1="200" x2="312" y2="200" stroke="#6B76A8" stroke-opacity="0.5"/><rect x="40" y="140" width="30" height="60" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="76" y="108" width="30" height="92" rx="4" fill="#ff4500"/><path d="M85 101L91 92L97 101Z" fill="#FFFFFF"/><rect x="132" y="116" width="30" height="84" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="168" y="78" width="30" height="122" rx="4" fill="#ff4500"/><path d="M177 71L183 62L189 71Z" fill="#FFFFFF"/><rect x="224" y="96" width="30" height="104" rx="4" fill="#6B76A8" fill-opacity="0.75"/><rect x="260" y="120" width="30" height="80" rx="4" fill="#ff4500"/><path d="M269 104L275 113L281 104Z" fill="#FFFFFF"/></svg></figure>
-      <div class="foto-texto">
-        <p style="margin-top:20px;">O Diagnóstico Financeiro analisa um período. Refeito a cada três meses, ele mostra o que mudou desde o último: o que melhorou, o que ainda pede atenção e se as ações deram resultado.</p>
-        <p style="color:var(--branco); font-weight:600; margin-top:16px;">Cada recomendação já vem com o sinal de que funcionou. No trimestre seguinte, dá para conferir.</p>
       </div>
     </div>
   </div>
