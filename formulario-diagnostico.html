@@ -333,7 +333,7 @@
 
       <div class="campo" style="margin-top:8px">
         <span class="t">Números por canal <span class="opc">(total do período)</span></span>
-        <span class="dica">Os canais marcados na parte 1 aparecem aqui. A receita e as taxas de cada canal são o que mostra quanto cada um deixa. Anexou o relatório de vendas de todos os canais? Pode pular.</span>
+        <span class="dica">Os canais marcados na parte 1 aparecem aqui. A receita, as taxas e o frete de cada canal são o que mostra quanto custa vender e quanto cada um deixa. Anexou o relatório de vendas de todos os canais? Pode pular.</span>
         <div id="canais-detalhe"><p class="vazio">Marque os canais na parte 1.</p></div>
       </div>
     </fieldset>
@@ -807,8 +807,8 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
   }
 
   // ---------- canais marcados na parte 1 viram blocos
-  var CANAL_CAMPOS = [["Receita", "rs"], ["Pedidos", "numeric"], ["Taxas e comissões", "rs"], ["Investimento em anúncios", "rs"],
-                      ["Vendas atribuídas aos anúncios", "rs"]];
+  var CANAL_CAMPOS = [["Receita", "rs"], ["Pedidos", "numeric"], ["Taxas e comissões", "rs"], ["Frete pago pela loja", "rs", "se souber"],
+                      ["Investimento em anúncios", "rs"], ["Vendas atribuídas aos anúncios", "rs"]];
   function montarCanais() {
     F.juntar();
     var box = $("#canais-detalhe"), antes = guardar(box);
@@ -816,7 +816,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     if (!lista.length) { box.innerHTML = '<p class="vazio">Marque os canais na parte 1.</p>'; return; }
     box.innerHTML = lista.map(function (c) {
       return '<div class="bloco-canal"><div class="nome">' + c + '</div><div class="linha">'
-        + CANAL_CAMPOS.map(function (f) { var n = "Canal " + c + " · " + f[0]; return campoValor(n, "", f[1], antes[n] || ""); }).join("")
+        + CANAL_CAMPOS.map(function (f) { var n = "Canal " + c + " · " + f[0]; return campoValor(n, f[2] || "", f[1], antes[n] || ""); }).join("")
         + "</div></div>";
     }).join("");
   }
@@ -966,14 +966,14 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var mkt = ($('input[name="grp-mkt"]:checked') || {}).value;
     var mktDados = arq("#f-ads") || tem("#grade-mkt input") || tem('#canais-detalhe input[name$="· Investimento em anúncios"]');
     var falta = [], leve = [];
-    if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["03 · O dinheiro em conta dá para quanto tempo?", "Depende do extrato bancário do período (parte 7)."]);
-    if (!canaisOk) falta.push(["05 · Quais canais realmente deixam lucro? e 10 · Qual é a meta de faturamento para investir em anúncios?",
+    if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["04 · O dinheiro em conta dá para quanto tempo?", "Depende do extrato bancário do período (parte 7)."]);
+    if (!canaisOk) falta.push(["03 · Quanto custa vender em cada canal?, 06 · Quais canais realmente deixam lucro? e 12 · Qual é a meta de faturamento para investir em anúncios?",
                                canais.length ? (relVendas && semRelatorio.length ? "Informe a receita de " + semRelatorio.join(" e ") + " na parte 3 ou anexe o relatório desse canal."
                                                 : "Dependem do relatório de vendas de cada canal ou da receita de cada canal (parte 3).") : "Dependem dos canais de venda marcados na parte 1."]);
-    if (!relVendas && !arq("#f-prod")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro?", "Depende do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
-    else if (!arq("#f-cat")) falta.push(["06 · Quais produtos sustentam a loja e quais prendem dinheiro? (sai sem a sobra de cada produto)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
-    if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["07 · Meus clientes voltam?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
-    if (mkt === "sim" && !mktDados) falta.push(["08 e 09 · As perguntas sobre os anúncios", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
+    if (!relVendas && !arq("#f-prod")) falta.push(["07 · Quais produtos vendem menos e prendem dinheiro? e 08 · Quais são os produtos mais vendidos?", "Dependem do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
+    else if (!arq("#f-cat")) falta.push(["07 · Quais produtos vendem menos e prendem dinheiro? e 08 · Quais são os produtos mais vendidos? (saem sem a sobra de cada produto e sem o estoque parado)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
+    if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["09 · Meus clientes voltam?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
+    if (mkt === "sim" && !mktDados) falta.push(["10 e 11 · As perguntas sobre os anúncios", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
     // marcou onde anuncia, mas deixou os valores em branco e não anexou relatório
     var platVazia = function (p) {
       var b = $$("#grade-mkt [data-plat]").filter(function (x) { return x.dataset.plat === p; })[0];
@@ -981,11 +981,11 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     };
     if (mkt === "sim" && mktDados && !arq("#f-ads")) {
       if (platVazia("Marketplace Ads") && !tem('#canais-detalhe input[name$="· Investimento em anúncios"]'))
-        falta.push(["08 · Os anúncios dentro das plataformas se pagam?", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
+        falta.push(["10 · Os anúncios dentro das plataformas se pagam?", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
       var foraVazias = ["Meta Ads", "Google Ads", "Outro"].filter(platVazia);
-      if (foraVazias.length) falta.push(["09 · O investimento fora das plataformas cabe no meu negócio?", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
+      if (foraVazias.length) falta.push(["11 · O investimento fora das plataformas cabe no meu negócio?", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
     }
-    if (mkt !== "sim") leve.push(["08 e 09 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
+    if (mkt !== "sim") leve.push(["10 e 11 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
     var nivel = !finOk || !venOk ? "falta" : falta.length ? "parcial" : leve.length ? "quase" : "completo";
     return { nivel: nivel, finOk: finOk, venOk: venOk, falta: falta, leve: leve };
   }
