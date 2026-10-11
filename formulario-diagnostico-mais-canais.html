@@ -261,7 +261,7 @@
 
       <div class="campo">
         <span class="t">Período para analisar</span>
-        <span class="dica">De 3 a 6 meses fechados. Os meses que você escolher aqui aparecem nas próximas perguntas.</span>
+        <span class="dica">3 meses fechados, seguidos. Escolha o mês inicial e o final se ajusta sozinho. Os meses que você escolher aqui aparecem nas próximas perguntas.</span>
         <div class="linha4">
           <select id="ini-mes" aria-label="Mês inicial"></select><select id="ini-ano" aria-label="Ano inicial"></select>
           <select id="fim-mes" aria-label="Mês final"></select><select id="fim-ano" aria-label="Ano final"></select>
@@ -712,7 +712,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
   var FIXOS = ["Folha", "Pró-labore", "Aluguel", "Sistemas", "Contabilidade", "Despesas administrativas e operacionais"];
   var ITENS_VEN = [["Pedidos", "numeric"], ["Unidades vendidas", "numeric"], ["Ticket médio", "rs"]];
 
-  // ---------- período (3 a 6 meses)
+  // ---------- período (exatamente 3 meses)
   var hoje = new Date(), fim = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1), ini = new Date(fim.getFullYear(), fim.getMonth() - 2, 1);
   var anos = [hoje.getFullYear() - 2, hoje.getFullYear() - 1, hoje.getFullYear()];
   function opcoes(sel, lista, valor) {
@@ -726,7 +726,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     while ((a < af || (a === af && m <= mf)) && out.length < 13) { out.push([m, a]); m++; if (m > 11) { m = 0; a++; } }
     return out;
   }
-  function periodoOk() { var n = meses().length; return n >= 3 && n <= 6; }
+  function periodoOk() { var n = meses().length; return n === 3; }
 
   // ---------- campos por mês (mantém o que já foi digitado quando o período muda)
   function guardar(box) { var v = {}; $$("input", box).forEach(function (i) { if (i.name) v[i.name] = i.value; }); return v; }
@@ -742,7 +742,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#paineis-fin"), abas = $("#abas-fin"), antes = guardar(box), ms = meses();
     var ativa = (abas.querySelector(".ativa") || {}).dataset;
     box.innerHTML = ""; abas.innerHTML = "";
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
     ms.forEach(function (mm, k) {
       var rot = F.curto(mm[0], mm[1]);
       var b = document.createElement("button"); b.type = "button"; b.textContent = rot; b.dataset.k = k; b.setAttribute("role", "tab");
@@ -792,7 +792,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
 
   function montarVendas() {
     var box = $("#grade-vendas"), antes = guardar(box), html = "";
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
     meses().forEach(function (mm) {
       var rot = F.curto(mm[0], mm[1]);
       html += '<div class="grupo">' + rot + '</div><div class="linha3">';
@@ -833,7 +833,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#grade-mkt"), antes = guardar(box);
     var lista = $("#h-plataformas").value ? $("#h-plataformas").value.split(", ") : [];
     if (!lista.length) { box.innerHTML = ""; return; }
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
     var ms = meses();
     box.innerHTML = lista.map(function (base) {
       var html = '<div class="bloco-canal" data-plat="' + base + '"><div class="nome">' + (NOME_PLAT[base] || base) + '</div>';
@@ -877,7 +877,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#grade-eventos"), marcados = {}, nomes = {};
     $$("input[type=checkbox]:checked", box).forEach(function (c) { marcados[c.closest("[data-junta]").dataset.junta + ":" + c.value] = true; });
     $$("input[data-nome-ev]", box).forEach(function (c) { nomes[c.dataset.nomeEv] = c.value; });
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 a 6 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
     box.innerHTML = meses().map(function (mm) {
       var id = idMes(mm), rot = F.curto(mm[0], mm[1]);
       return '<div class="mes-ev"><div class="grupo">' + rot + '</div><div class="chips peq" data-junta="' + id + '">'
@@ -917,11 +917,19 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
 
   function atualizarPeriodo() {
     var ms = meses(), el = $("#periodo-txt");
-    if (!periodoOk()) { el.style.color = "var(--erro)"; el.textContent = ms.length < 3 ? "Escolha pelo menos 3 meses." : "No máximo 6 meses."; }
+    if (!periodoOk()) { el.style.color = "var(--erro)"; el.textContent = "Escolha exatamente 3 meses seguidos."; }
     else { el.style.color = ""; el.textContent = ms.length + " meses: " + F.MESES[ms[0][0]] + "/" + ms[0][1] + " a " + F.MESES[ms[ms.length - 1][0]] + "/" + ms[ms.length - 1][1]; }
     montarFinanceiro(); montarVendas(); montarMkt(); montarEventos(); F.sincronizar();
   }
-  ["#ini-mes", "#ini-ano", "#fim-mes", "#fim-ano"].forEach(function (s) { $(s).addEventListener("change", atualizarPeriodo); });
+  // o período tem sempre 3 meses: mexeu no início, o fim acompanha; mexeu no fim, o início acompanha
+  function ajustarPeriodo(mudouInicio) {
+    var d = mudouInicio ? new Date(+$("#ini-ano").value, +$("#ini-mes").value + 2, 1) : new Date(+$("#fim-ano").value, +$("#fim-mes").value - 2, 1);
+    var p = mudouInicio ? "#fim" : "#ini";
+    $(p + "-mes").value = d.getMonth(); $(p + "-ano").value = d.getFullYear();
+  }
+  ["#ini-mes", "#ini-ano", "#fim-mes", "#fim-ano"].forEach(function (s) {
+    $(s).addEventListener("change", function () { ajustarPeriodo(s.indexOf("#ini") === 0); atualizarPeriodo(); });
+  });
   atualizarPeriodo();
 
   F.autosalvar("finspots-form-diagnostico", function () { montarCanais(); atualizarPeriodo(); });
@@ -1014,7 +1022,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     [["#loja", "nome da loja"], ["#resp", "responsável"], ["#zap", "WhatsApp"], ["#email", "e-mail"]].forEach(function (c) {
       if (!F.preenchido($(c[0]))) e.push("Parte 1: " + c[1] + ".");
     });
-    if (!periodoOk()) e.push("Parte 1: período de 3 a 6 meses.");
+    if (!periodoOk()) e.push("Parte 1: período de 3 meses.");
     if (!$('input[name="Regime tributário"]:checked')) e.push("Parte 1: regime tributário.");
     var modoFin = $('input[name="grp-fin"]:checked').value;
     if (modoFin === "arquivo" && !F.temArquivo("#f-dre")) e.push("Parte 2: anexe a DRE ou planilha financeira (ou escolha preencher aqui).");
