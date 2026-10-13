@@ -182,19 +182,15 @@
     aspect-ratio: 1 / 1;
   }
   .hero-imagem img { width: 100%; height: 100%; object-fit: cover; }
-  /* Hero centralizado com vídeo */
+  /* Hero centralizado com imagem de fundo */
+  .hero-central {
+    padding: 110px 0 96px;
+    background: #00031b url('assets/img/hero-carrinho.jpg') center / cover no-repeat;
+  }
   .hero-central .wrap { display: block; text-align: center; }
   .hero-central h1 { color: var(--laranja); font-size: clamp(28px, 4.4vw, 50px); line-height: 1.2; margin-bottom: 36px; }
   .hero-central h1 { color: var(--branco); }
   .hero-central h1 .subtitulo { display: inline; font-size: inherit; margin: 0; color: var(--laranja); }
-  .hero-video {
-    max-width: 720px; margin: 0 auto 32px;
-    aspect-ratio: 16 / 9; background: #0a1440;
-    border-radius: 14px; overflow: hidden;
-    border: 1.5px solid var(--laranja);
-    box-shadow: 0 0 32px rgba(255, 69, 0,0.28);
-  }
-  .hero-video iframe { width: 100%; height: 100%; border: 0; display: block; }
   .hero-central p { max-width: 900px; margin: 0 auto 4px; color: var(--suave); }
   .hero-central .hero-destaque { color: var(--branco); font-weight: 600; margin-top: 14px; }
   .hero-central .cta-area { margin-top: 30px; }
@@ -495,10 +491,6 @@
   <div class="wrap">
     <div class="kicker">Entregamos respostas, não planilhas.</div>
     <h1>Seu e-commerce vende.<br><span class="subtitulo">Mas está dando dinheiro?</span></h1>
-    <div class="hero-video">
-      <!-- Vídeo de TESTE: troque o código depois de /embed/ pelo vídeo oficial -->
-      <iframe src="https://www.youtube-nocookie.com/embed/JWrEthB3Efk?rel=0" title="Vídeo do Diagnóstico Financeiro Finspots" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
     <p>O Diagnóstico Financeiro lê os números da sua loja e responde, em linguagem simples, as perguntas que todo dono faz.</p>
     <p>Em cada resposta, o motivo. No final, o que fazer primeiro.</p>
     <p class="hero-destaque">Você envia os dados. Nós fazemos a análise. Você recebe as respostas.</p>
