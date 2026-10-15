@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formulário do Diagnóstico · Finspots</title>
+<title>Formulário do Diagnóstico · mais canais · Finspots</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/finspots-favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -190,7 +190,7 @@
   <div class="video-tutorial">
     <p><strong>Antes de começar, assista a este vídeo rápido.</strong> Neste vídeo mostramos o passo a passo de como preencher o formulário e onde encontrar cada informação, para você responder com tranquilidade.</p>
     <div class="video-quadro">
-      <iframe src="https://www.youtube-nocookie.com/embed/ns8Gr78jUjw?rel=0" title="Tutorial: como preencher o formulário do diagnóstico" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/Pbo-Thg1SIE?rel=0" title="Tutorial: como preencher o formulário do diagnóstico" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
   </div>
   <p class="intro">Responda com calma e do seu jeito. Tem relatório pronto do sistema? É só anexar. Prefere digitar? Preencha os campos. O que você não tiver, pode deixar em branco.</p>
@@ -206,7 +206,7 @@
   <form id="form" action="#" method="POST" enctype="multipart/form-data" novalidate>
     <input type="hidden" name="_subject" id="assunto" value="Novo diagnóstico">
     <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://finspots.com.br/obrigado-mais-canais.html">
+    <input type="hidden" name="_next" value="https://finspots.com.br/obrigado.html">
     <input type="text" name="_honey" class="escondido" tabindex="-1" autocomplete="off" aria-hidden="true">
     <input type="hidden" name="Formulário" value="Diagnóstico">
     <input type="hidden" name="Período analisado" id="h-periodo">
@@ -244,7 +244,7 @@
       </div>
       <div class="campo">
         <span class="t">Principais canais de venda</span>
-        <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro">
+        <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro" data-max="10">
           <label><input type="checkbox" value="Mercado Livre"><span>Mercado Livre</span></label>
           <label><input type="checkbox" value="Shopee"><span>Shopee</span></label>
           <label><input type="checkbox" value="Amazon"><span>Amazon</span></label>
@@ -255,8 +255,8 @@
           <label><input type="checkbox" value="Instagram / WhatsApp"><span>Instagram / WhatsApp</span></label>
           <label><input type="checkbox" value="Loja física"><span>Loja física</span></label>
         </div>
-        <input type="text" id="canal-outro" placeholder="Outros canais? Escreva aqui, separados por vírgula" style="margin-top:10px" data-sempre>
-        <span class="dica">Marque todos os canais em que a loja vende. Não há limite.</span>
+        <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui" style="margin-top:10px" data-sempre>
+        <span class="dica" id="canais-limite" style="margin-top:8px">Marque todos os canais em que a loja vende, até 10. Os que não estão na lista, escreva no campo acima, separados por vírgula (ex.: Elo7, Feira de artesanato).</span>
       </div>
 
       <div class="campo">
@@ -335,6 +335,35 @@
         <span class="t">Números por canal <span class="opc">(total do período)</span></span>
         <span class="dica">Os canais marcados na parte 1 aparecem aqui. A receita, as taxas e o frete de cada canal são o que mostra quanto custa vender e quanto cada um deixa. Anexou o relatório de vendas de todos os canais? Pode pular.</span>
         <div id="canais-detalhe"><p class="vazio">Marque os canais na parte 1.</p></div>
+      </div>
+      <!-- loja física: só aparece quando a pessoa marca "Loja física" na parte 1 -->
+      <div class="condicional recuo" id="bloco-lf" style="margin-top:18px">
+        <span class="t">Loja física <span class="opc">(o balcão)</span></span>
+        <span class="dica">Como você marcou loja física, o Diagnóstico ganha uma parte só dela: se o ponto se paga, quanto a maquininha leva, se a equipe do balcão se paga e em que horários a loja vende mais. Tudo é opcional: preencha o que tiver.</span>
+        <div class="grupo" style="margin-top:12px">O ponto, por mês</div>
+        <span class="dica">Do aluguel e das contas que você informou na parte 2, quanto é do ponto da loja. Não é um custo a mais: é só para separar o que é do balcão.</span>
+        <div class="linha">
+          <div class="campo"><label class="dica" for="lf-aluguel" style="margin:0 0 4px">Aluguel do ponto</label><div class="rs"><input type="text" id="lf-aluguel" name="Loja física · Aluguel do ponto" inputmode="decimal"></div></div>
+          <div class="campo"><label class="dica" for="lf-cond" style="margin:0 0 4px">Condomínio e IPTU</label><div class="rs"><input type="text" id="lf-cond" name="Loja física · Condomínio e IPTU" inputmode="decimal"></div></div>
+        </div>
+        <div class="linha">
+          <div class="campo"><label class="dica" for="lf-contas" style="margin:0 0 4px">Luz, água e internet do ponto</label><div class="rs"><input type="text" id="lf-contas" name="Loja física · Luz, água e internet do ponto" inputmode="decimal"></div></div>
+          <div class="campo"><label class="dica" for="lf-outros" style="margin:0 0 4px">Outros custos do ponto <span class="opc">· se tiver</span></label><div class="rs"><input type="text" id="lf-outros" name="Loja física · Outros custos do ponto" inputmode="decimal"></div></div>
+        </div>
+        <div class="grupo">Formas de pagamento no balcão <span class="opc" style="text-transform:none;letter-spacing:0">· total do período</span></div>
+        <span class="dica">Quanto entrou em cada forma de pagamento e a taxa que a maquininha cobra. Está no relatório da maquininha ou do sistema de caixa. Pode anexar o relatório em vez de digitar.</span>
+        <div id="grade-pag"></div>
+        <div class="campo"><span class="t" style="font-size:14px">Antecipa os recebíveis do cartão?</span>
+          <div class="chips peq">
+            <label><input type="radio" name="Loja física · Antecipa os recebíveis" value="Sim"><span>Sim</span></label>
+            <label><input type="radio" name="Loja física · Antecipa os recebíveis" value="Não"><span>Não</span></label>
+          </div></div>
+        <div class="grupo">Equipe do balcão</div>
+        <span class="dica">Das pessoas da folha (parte 2), quem trabalha no balcão: o custo por mês (salário e encargos), a comissão e quanto cada uma vendeu no período. Você atende sozinha? Pode pular.</span>
+        <div id="grade-vend"></div>
+        <div class="arquivo"><label class="t" for="f-caixa">Relatório do sistema de caixa <span class="opc">(vendas com data e hora)</span></label>
+          <span class="dica">É com a data e a hora de cada venda que mostramos em que dias e horários a loja vende mais. Do jeito que o sistema exporta.</span>
+          <input type="file" id="f-caixa" name="Caixa da loja física" multiple accept=".csv,.xlsx,.xls,.ods,.pdf"></div>
       </div>
     </fieldset>
 
@@ -820,8 +849,27 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
         + "</div></div>";
     }).join("");
   }
-  $("#canais").addEventListener("change", montarCanais);
-  $("#canal-outro").addEventListener("change", montarCanais);
+  // limite de canais deste formulário (o Diagnóstico padrão cobre até 3): o que passar do limite é desfeito e o aviso acende
+  var MAX_CANAIS = +($("#canais").dataset.max || 0);
+  function contarCanais() { F.juntar(); return $("#h-canais").value ? $("#h-canais").value.split(", ").length : 0; }
+  function avisoLimite(aceso) {
+    var a = $("#canais-limite");
+    if (a) { a.style.color = aceso ? "var(--erro)" : ""; a.style.fontWeight = aceso ? "600" : ""; }
+  }
+  function limitarCanais(e) {
+    if (!MAX_CANAIS) return;
+    var passou = contarCanais() > MAX_CANAIS;
+    if (passou) {
+      if (e.target.type === "checkbox") e.target.checked = false;
+      else {                                  // campo "outro": fica só o que couber
+        var cabem = MAX_CANAIS - $$("#canais input:checked").length;
+        e.target.value = e.target.value.split(/[,;]/).map(function (n) { return n.trim(); }).filter(Boolean).slice(0, Math.max(cabem, 0)).join(", ");
+      }
+    }
+    avisoLimite(passou);
+  }
+  $("#canais").addEventListener("change", function (e) { limitarCanais(e); montarCanais(); });
+  $("#canal-outro").addEventListener("change", function (e) { limitarCanais(e); montarCanais(); });
 
   // ---------- marketing: plataformas escolhidas viram blocos, com valor por mês e total do período
   // Os totais mantêm os nomes de antes ("Meta Ads · Investimento no período", "Meta Ads · Receita atribuída"):
@@ -932,7 +980,41 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
   });
   atualizarPeriodo();
 
-  F.autosalvar("finspots-form-diagnostico", function () { montarCanais(); atualizarPeriodo(); });
+
+  // ---------- loja física: o bloco abre quando "Loja física" está entre os canais
+  var FORMAS_PAG = [["Pix", "0"], ["Dinheiro", "0"], ["Débito", ""], ["Crédito à vista", ""], ["Crédito parcelado", ""], ["Outros", ""]];
+  $("#grade-pag").innerHTML = FORMAS_PAG.map(function (f) {
+    var n = "Pagamento " + f[0] + " · ";
+    return '<div class="linha3"><div class="campo"><span class="dica" style="margin:12px 0 0;font-weight:600;color:var(--branco)">' + f[0] + '</span></div>'
+      + campoValor(n + "Valor no período", "", "rs", "") + '<div class="campo"><label class="dica" style="margin:0 0 4px">Taxa (%)</label>'
+      + '<input type="text" name="' + n + 'Taxa (%)" inputmode="decimal" placeholder="' + (f[1] === "0" ? "0" : "ex.: 3,2") + '"></div></div>';
+  }).join("");
+  $("#grade-vend").innerHTML = [1, 2, 3, 4, 5].map(function (i) {
+    var n = "Vendedor " + i + " · ";
+    return '<div class="bloco-canal" data-vend="' + i + '"' + (i > 1 ? ' style="display:none"' : "") + '><div class="linha">'
+      + '<div class="campo"><label class="dica" style="margin:0 0 4px">Nome</label><input type="text" name="' + n + 'Nome"></div>'
+      + campoValor(n + "Salário e encargos por mês", "", "rs", "")
+      + '<div class="campo"><label class="dica" style="margin:0 0 4px">Comissão (%) <span class="opc">· se tiver</span></label><input type="text" name="' + n + 'Comissão (%)" inputmode="decimal" placeholder="ex.: 2"></div>'
+      + campoValor(n + "Vendas no período", "quanto essa pessoa vendeu", "rs", "")
+      + "</div></div>";
+  }).join("") + '<button type="button" class="mini" id="mais-vend">+ Adicionar outra pessoa</button>';
+  $("#mais-vend").addEventListener("click", function () {
+    var oculto = $$('#grade-vend [data-vend]').filter(function (b) { return b.style.display === "none"; })[0];
+    if (oculto) oculto.style.display = "";
+    if ($$('#grade-vend [data-vend]').every(function (b) { return b.style.display !== "none"; })) this.style.display = "none";
+  });
+  function temLojaFisica() { F.juntar(); return ($("#h-canais").value || "").split(", ").indexOf("Loja física") >= 0; }
+  function abrirLojaFisica() {
+    var b = $("#bloco-lf"), abre = temLojaFisica();
+    b.classList.toggle("aberto", abre);
+    $$("input", b).forEach(function (i) { i.disabled = !abre; });      // fechado = não vai no e-mail
+    $$('#grade-vend [data-vend]').forEach(function (bl) {                // quem já foi preenchido continua visível
+      if ($$("input", bl).some(function (i) { return i.value.trim(); })) bl.style.display = "";
+    });
+  }
+  $("#canais").addEventListener("change", abrirLojaFisica);
+  abrirLojaFisica();
+  F.autosalvar("finspots-form-diagnostico", function () { montarCanais(); atualizarPeriodo(); abrirLojaFisica(); });
   // ---------- situação do formulário: o que o Diagnóstico vai conseguir responder com o que foi preenchido
   // completo (verde) · só falta o que é opcional para a maioria: marketing e a sua pergunta (verde claro) ·
   // faltam perguntas (amarelo, com a lista) · falta o essencial (vermelho)
@@ -973,6 +1055,11 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
         falta.push(["10 · Os anúncios dentro das plataformas se pagam?", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
       var foraVazias = ["Meta Ads", "Google Ads", "Outro"].filter(platVazia);
       if (foraVazias.length) falta.push(["11 · O investimento fora das plataformas cabe no meu negócio?", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
+    }
+    if (canais.indexOf("Loja física") >= 0) {                          // a parte da loja física: cada pergunta com o que precisa
+      if (!tem("#bloco-lf input[name^='Loja física · '][inputmode]")) leve.push(["13 · O ponto se paga?", "Depende do custo do ponto (parte 3, Loja física)."]);
+      if (!tem('#grade-pag input[name$="· Valor no período"]')) leve.push(["14 · Quanto a maquininha está levando?", "Depende das formas de pagamento do balcão (parte 3, Loja física)."]);
+      if (!arq("#f-caixa")) leve.push(["16 · Em que dias e horários a loja vende mais?", "Depende do relatório do sistema de caixa, com data e hora (parte 3, Loja física)."]);
     }
     if (mkt !== "sim") leve.push(["10 e 11 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
     var nivel = !finOk || !venOk ? "falta" : falta.length ? "parcial" : leve.length ? "quase" : "completo";
@@ -1045,7 +1132,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var ms = meses();
     $("#h-periodo").value = F.MESES[ms[0][0]] + (ms[0][1] !== ms[ms.length - 1][1] ? "/" + ms[0][1] : "") + " a "
                           + F.MESES[ms[ms.length - 1][0]] + "/" + ms[ms.length - 1][1];
-    $("#assunto").value = "Novo diagnóstico: " + $("#loja").value.trim();
+    $("#assunto").value = "Novo diagnóstico (mais canais): " + $("#loja").value.trim();
     $$("#paineis-fin input[readonly]").forEach(function (i) { if (!i.value) i.disabled = true; });
   });
 })();
