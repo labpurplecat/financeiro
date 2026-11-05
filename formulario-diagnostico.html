@@ -174,37 +174,45 @@
   .pagina { display: block; }
   .ajuda { display: none; }
   .btn-ajuda { position: fixed; right: 16px; bottom: 16px; z-index: 30; font: inherit; font-size: 14px; font-weight: 600;
-    background: var(--laranja); color: #fff; border: none; border-radius: 999px; padding: 11px 16px; cursor: pointer;
+    background: #14295F; color: #fff; border: 1px solid #3A548F; border: none; border-radius: 999px; padding: 11px 16px; cursor: pointer;
     box-shadow: 0 8px 24px rgba(0,0,0,.35); display: flex; align-items: center; gap: 8px; }
-  .btn-ajuda i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.22);
+  .btn-ajuda i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: var(--laranja); color: #fff;
     display: grid; place-items: center; font-size: 13px; }
-  .ajuda { background: rgba(0,3,27,.94); border: 1px solid var(--borda); border-radius: 18px; padding: 18px 18px 16px; }
-  .ajuda.aberta { display: block; position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 78vh; overflow: auto; z-index: 40; background: #00031B;
-    box-shadow: 0 -10px 40px rgba(0,0,0,.5); animation: aparece .2s ease-out; }
+  /* o painel é de um azul mais claro que o formulário de propósito: fica evidente que é ajuda, e não pergunta */
+  .ajuda { --aj-bg: #14295F; --aj-card: #1C3670; --aj-chip: #1C3670; --aj-txt: #FFFFFF; --aj-suave: #C9D3EE; --aj-borda: #3A548F; --aj-ativo: rgba(255,85,0,.18); --aj-link: #FF8A4D;
+    background: var(--aj-bg); color: var(--aj-txt); border: 1px solid var(--aj-borda); border-radius: 18px; padding: 18px 18px 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.35); }
+  .ajuda.aberta { display: block; position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 78vh; overflow: auto; z-index: 40;
+    box-shadow: 0 -10px 40px rgba(0,0,0,.55); animation: aparece .2s ease-out; }
   .aj-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .aj-rot { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--laranja); }
-  .aj-fechar { font: inherit; font-size: 22px; line-height: 1; background: none; border: none; color: var(--fraco); cursor: pointer; padding: 2px 6px; }
-  .aj-parte { font-weight: 700; font-size: 16px; margin: 6px 0 10px; }
+  .aj-rot { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--laranja); }
+  .aj-rot::before { content: "?"; width: 20px; height: 20px; border-radius: 50%; background: var(--laranja); color: #fff;
+    display: grid; place-items: center; font-size: 12px; letter-spacing: 0; }
+  .aj-fechar { font: inherit; font-size: 22px; line-height: 1; background: none; border: none; color: var(--aj-suave); cursor: pointer; padding: 2px 6px; }
+  .aj-parte { font-weight: 700; font-size: 16px; margin: 6px 0 10px; color: var(--aj-txt); }
   .aj-temas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .aj-temas button { font: inherit; font-size: 12.5px; background: transparent; color: var(--suave); border: 1px solid var(--borda);
+  .aj-temas button { font: inherit; font-size: 12.5px; background: var(--aj-chip); color: var(--aj-suave); border: 1px solid var(--aj-borda);
     border-radius: 999px; padding: 5px 11px; cursor: pointer; }
-  .aj-temas button.ativo { border-color: var(--laranja); color: #fff; background: var(--laranja-fraco); }
-  .aj-slide { background: rgba(255,255,255,.04); border-radius: 12px; padding: 14px; min-height: 150px; }
-  .aj-slide h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
-  .aj-slide p { font-size: 13.5px; color: var(--suave); }
-  .aj-slide p b { color: #fff; font-weight: 600; }
+  .aj-temas button.ativo { border-color: var(--laranja); color: var(--laranja); background: var(--aj-ativo); font-weight: 600; }
+  .aj-slide { background: var(--aj-card); border: 1px solid var(--aj-borda); border-radius: 12px; padding: 14px; min-height: 150px; }
+  .aj-slide h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; color: var(--aj-txt); }
+  .aj-slide p { font-size: 13.5px; color: var(--aj-suave); }
+  .aj-slide p b { color: var(--aj-txt); font-weight: 600; }
   .aj-slide figure { margin: 10px 0 0; }
-  .aj-slide img { display: block; width: 100%; border-radius: 8px; border: 1px solid var(--borda); }
-  .aj-slide a.aj-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--laranja); }
+  .aj-slide img { display: block; width: 100%; border-radius: 8px; border: 1px solid var(--aj-borda); }
+  .aj-slide a.aj-link { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--aj-link); }
   .aj-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-  .aj-nav button { font: inherit; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; background: transparent; color: #fff;
-    border: 1px solid var(--borda); cursor: pointer; }
-  .aj-nav button:disabled { opacity: .3; cursor: default; }
+  .aj-nav button { font: inherit; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; background: var(--aj-chip); color: var(--aj-txt);
+    border: 1px solid var(--aj-borda); cursor: pointer; }
+  .aj-nav button:not(:disabled):hover { border-color: var(--laranja); color: var(--laranja); }
+  .aj-nav button:disabled { opacity: .35; cursor: default; }
   .aj-pontos { display: flex; gap: 6px; }
-  .aj-pontos i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.18); }
+  .aj-pontos i { width: 7px; height: 7px; border-radius: 50%; background: var(--aj-borda); }
   .aj-pontos i.at { background: var(--laranja); }
-  .aj-zap { font-size: 12.5px; color: var(--fraco); margin-top: 12px; }
-  .aj-zap a { color: var(--suave); }
+  .aj-zap { font-size: 12.5px; color: var(--aj-suave); margin-top: 12px; }
+  .aj-zap a { color: var(--aj-txt); font-weight: 600; }
+  .ajuda :focus-visible { outline-color: var(--laranja); }
   @media (min-width: 1120px) {
     .pagina { display: grid; grid-template-columns: minmax(0, 760px) 340px; gap: 28px; justify-content: center; align-items: start; }
     .pagina .wrap { margin: 0; }
