@@ -30,13 +30,6 @@
   .pilulas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
   .pilula { font-size: 12.5px; border-radius: 999px; padding: 4px 12px; background: var(--laranja-fraco); color: var(--laranja); }
   .pilula.cinza { background: rgba(255,255,255,.06); color: var(--suave); }
-  .video-tutorial { margin: 18px 0 22px; }
-  .video-tutorial p { color: var(--suave); margin-bottom: 12px; }
-  .video-tutorial p strong { color: var(--branco); font-weight: 600; }
-  .video-quadro { position: relative; aspect-ratio: 16 / 9; border-radius: 16px; overflow: hidden;
-                  border: 2px solid var(--laranja); background: var(--quase-preto);
-                  box-shadow: 0 0 28px rgba(255,85,0,0.35); }
-  .video-quadro iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
   fieldset { border: 1px solid var(--borda); border-radius: 16px; padding: 24px 20px 8px; margin-top: 26px;
              background: rgba(0,3,27,0.55); backdrop-filter: blur(4px); min-width: 0; }
@@ -176,24 +169,60 @@
   }
   #bg-fundo { position: fixed; inset: 0; z-index: -1; pointer-events: none;
               background: var(--azul) url('assets/img/fundo-formulario.png') center / cover no-repeat; }
+
+  /* ---------- painel "Onde encontro isso?": ao lado no computador, gaveta no celular */
+  .pagina { display: block; }
+  .ajuda { display: none; }
+  .btn-ajuda { position: fixed; right: 16px; bottom: 16px; z-index: 30; font: inherit; font-size: 14px; font-weight: 600;
+    background: var(--laranja); color: #fff; border: none; border-radius: 999px; padding: 11px 16px; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0,0,0,.35); display: flex; align-items: center; gap: 8px; }
+  .btn-ajuda i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,.22);
+    display: grid; place-items: center; font-size: 13px; }
+  .ajuda { background: rgba(0,3,27,.94); border: 1px solid var(--borda); border-radius: 18px; padding: 18px 18px 16px; }
+  .ajuda.aberta { display: block; position: fixed; left: 8px; right: 8px; bottom: 8px; max-height: 78vh; overflow: auto; z-index: 40; background: #00031B;
+    box-shadow: 0 -10px 40px rgba(0,0,0,.5); animation: aparece .2s ease-out; }
+  .aj-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .aj-rot { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--laranja); }
+  .aj-fechar { font: inherit; font-size: 22px; line-height: 1; background: none; border: none; color: var(--fraco); cursor: pointer; padding: 2px 6px; }
+  .aj-parte { font-weight: 700; font-size: 16px; margin: 6px 0 10px; }
+  .aj-temas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .aj-temas button { font: inherit; font-size: 12.5px; background: transparent; color: var(--suave); border: 1px solid var(--borda);
+    border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .aj-temas button.ativo { border-color: var(--laranja); color: #fff; background: var(--laranja-fraco); }
+  .aj-slide { background: rgba(255,255,255,.04); border-radius: 12px; padding: 14px; min-height: 150px; }
+  .aj-slide h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
+  .aj-slide p { font-size: 13.5px; color: var(--suave); }
+  .aj-slide p b { color: #fff; font-weight: 600; }
+  .aj-slide figure { margin: 10px 0 0; }
+  .aj-slide img { display: block; width: 100%; border-radius: 8px; border: 1px solid var(--borda); }
+  .aj-slide a.aj-link { display: inline-block; margin-top: 10px; font-size: 13px; color: var(--laranja); }
+  .aj-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+  .aj-nav button { font: inherit; font-size: 18px; width: 34px; height: 34px; border-radius: 50%; background: transparent; color: #fff;
+    border: 1px solid var(--borda); cursor: pointer; }
+  .aj-nav button:disabled { opacity: .3; cursor: default; }
+  .aj-pontos { display: flex; gap: 6px; }
+  .aj-pontos i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.18); }
+  .aj-pontos i.at { background: var(--laranja); }
+  .aj-zap { font-size: 12.5px; color: var(--fraco); margin-top: 12px; }
+  .aj-zap a { color: var(--suave); }
+  @media (min-width: 1120px) {
+    .pagina { display: grid; grid-template-columns: minmax(0, 760px) 340px; gap: 28px; justify-content: center; align-items: start; }
+    .pagina .wrap { margin: 0; }
+    .ajuda { display: block; position: sticky; top: 24px; margin-top: 32px; max-height: calc(100vh - 48px); overflow: auto; }
+    .aj-fechar, .btn-ajuda { display: none; }
+  }
 </style>
 </head>
 <body>
 <div id="bg-fundo" aria-hidden="true"></div>
-<div class="wrap">
+<div class="pagina"><div class="wrap">
   <header>
     <img src="assets/img/finspots-logo.png" alt="Finspots">
     <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico.">Dúvida?<br>Chama no WhatsApp</a>
   </header>
 
   <h1>Vamos começar o seu <span>diagnóstico</span></h1>
-  <div class="video-tutorial">
-    <p><strong>Antes de começar, assista a este vídeo rápido.</strong> Neste vídeo mostramos o passo a passo de como preencher o formulário e onde encontrar cada informação, para você responder com tranquilidade.</p>
-    <div class="video-quadro">
-      <iframe src="https://www.youtube-nocookie.com/embed/Rhu5ddfjtec?rel=0" title="Tutorial: como preencher o formulário do diagnóstico" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-  </div>
-  <p class="intro">Responda com calma e do seu jeito. Tem relatório pronto do sistema? É só anexar. Prefere digitar? Preencha os campos. O que você não tiver, pode deixar em branco.</p>
+  <p class="intro">Responda com calma e do seu jeito. Ficou na dúvida de onde achar alguma informação? O painel <b>Onde encontro isso?</b> mostra o passo a passo da parte em que você está. Tem relatório pronto do sistema? É só anexar. Prefere digitar? Preencha os campos. O que você não tiver, pode deixar em branco.</p>
   <div class="pilulas">
     <span class="pilula">Essencial: dados da loja, período, regime, resultado e vendas</span>
     <span class="pilula cinza">O restante é opcional</span>
@@ -243,8 +272,9 @@
           <input type="text" id="inicio" name="Data de início" placeholder="mês/ano, ex.: 03/2021"></div>
       </div>
       <div class="campo">
-        <span class="t">Principais canais de venda</span>
-        <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro" data-max="3">
+        <span class="t">Canais de venda</span>
+        <span class="dica">Marque todos em que a loja vendeu no período (até 10).</span>
+        <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro" data-max="10">
           <label><input type="checkbox" value="Mercado Livre"><span>Mercado Livre</span></label>
           <label><input type="checkbox" value="Shopee"><span>Shopee</span></label>
           <label><input type="checkbox" value="Amazon"><span>Amazon</span></label>
@@ -253,15 +283,17 @@
           <label><input type="checkbox" value="TikTok Shop"><span>TikTok Shop</span></label>
           <label><input type="checkbox" value="Site próprio"><span>Site próprio</span></label>
           <label><input type="checkbox" value="Instagram / WhatsApp"><span>Instagram / WhatsApp</span></label>
-          <label><input type="checkbox" value="Loja física"><span>Loja física</span></label>
+          <label><input type="checkbox" value="Americanas"><span>Americanas</span></label>
+          <label><input type="checkbox" value="Casas Bahia"><span>Casas Bahia</span></label>
+          <label><input type="checkbox" value="Elo7"><span>Elo7</span></label>
         </div>
-        <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui" style="margin-top:10px" data-sempre>
-        <span class="dica" id="canais-limite" style="margin-top:8px">O Diagnóstico analisa até 3 canais de venda. Sua loja vende em mais de 3? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%203%20canais%20e%20quero%20um%20or%C3%A7amento%20do%20Diagn%C3%B3stico%20Financeiro." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a> para um orçamento.</span>
+        <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui (mais de um? separe por vírgula)" style="margin-top:10px" data-sempre>
+        <span class="dica" id="canais-limite" style="margin-top:8px">Vende em mais de 10 canais? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%2010%20canais." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a>.</span>
       </div>
 
       <div class="campo">
         <span class="t">Período para analisar</span>
-        <span class="dica">3 meses fechados, seguidos. Escolha o mês inicial e o final se ajusta sozinho. Os meses que você escolher aqui aparecem nas próximas perguntas.</span>
+        <span class="dica">4 meses fechados, seguidos (os mais recentes). Escolha o mês inicial e o final se ajusta sozinho. Os meses que você escolher aqui aparecem nas próximas perguntas.</span>
         <div class="linha4">
           <select id="ini-mes" aria-label="Mês inicial"></select><select id="ini-ano" aria-label="Ano inicial"></select>
           <select id="fim-mes" aria-label="Mês final"></select><select id="fim-ano" aria-label="Ano final"></select>
@@ -442,7 +474,7 @@
       <div class="campo"><label class="t" for="duv">Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?</label>
         <span class="dica">Vamos responder isso no seu relatório. Em branco, essa parte não entra.</span>
         <textarea id="duv" name="Qual sua maior dúvida ou problema hoje? O que você espera descobrir com o diagnóstico?"
-                  placeholder="ex.: Consigo aumentar meu pró-labore? Por que vendo bem e nunca sobra dinheiro?"></textarea></div>
+                  placeholder="ex.: Por que vendo bem e nunca sobra dinheiro? Vale a pena continuar na Shopee?"></textarea></div>
     </fieldset>
 
     <!-- situação: o que o Diagnóstico vai conseguir responder com o que foi preenchido -->
@@ -463,6 +495,16 @@
       <p class="lgpd">Seus dados são usados só para o seu diagnóstico. Veja a <a href="privacidade.html">Política de Privacidade</a>.</p>
     </div>
   </form>
+</div>
+<aside class="ajuda" id="ajuda" aria-label="Onde encontro isso?">
+  <div class="aj-topo"><span class="aj-rot">Onde encontro isso?</span><button type="button" class="aj-fechar" id="aj-fechar" aria-label="Fechar">×</button></div>
+  <div class="aj-parte" id="aj-parte"></div>
+  <div class="aj-temas" id="aj-temas"></div>
+  <div class="aj-slide" id="aj-slide" aria-live="polite"></div>
+  <div class="aj-nav"><button type="button" id="aj-ant" aria-label="Anterior">‹</button><span class="aj-pontos" id="aj-pontos"></span><button type="button" id="aj-prox" aria-label="Próximo">›</button></div>
+  <p class="aj-zap">Ainda com dúvida? <a href="https://wa.me/5562996653913?text=Oi!%20Tenho%20uma%20d%C3%BAvida%20no%20formul%C3%A1rio%20do%20diagn%C3%B3stico." target="_blank" rel="noopener">Chame no WhatsApp</a>.</p>
+</aside>
+<button type="button" class="btn-ajuda" id="btn-ajuda" aria-controls="ajuda"><i>?</i>Onde encontro isso?</button>
 </div>
 
 <script>
@@ -712,8 +754,8 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
   var FIXOS = ["Folha", "Pró-labore", "Aluguel", "Sistemas", "Contabilidade", "Despesas administrativas e operacionais"];
   var ITENS_VEN = [["Pedidos", "numeric"], ["Unidades vendidas", "numeric"], ["Ticket médio", "rs"]];
 
-  // ---------- período (exatamente 3 meses)
-  var hoje = new Date(), fim = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1), ini = new Date(fim.getFullYear(), fim.getMonth() - 2, 1);
+  // ---------- período (exatamente 4 meses)
+  var hoje = new Date(), fim = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1), ini = new Date(fim.getFullYear(), fim.getMonth() - 3, 1);
   var anos = [hoje.getFullYear() - 2, hoje.getFullYear() - 1, hoje.getFullYear()];
   function opcoes(sel, lista, valor) {
     lista.forEach(function (t, i) { var o = document.createElement("option"); o.value = typeof t === "number" ? t : i;
@@ -726,7 +768,8 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     while ((a < af || (a === af && m <= mf)) && out.length < 13) { out.push([m, a]); m++; if (m > 11) { m = 0; a++; } }
     return out;
   }
-  function periodoOk() { var n = meses().length; return n === 3; }
+  var N_MESES = 4;
+  function periodoOk() { var n = meses().length; return n === N_MESES; }
 
   // ---------- campos por mês (mantém o que já foi digitado quando o período muda)
   function guardar(box) { var v = {}; $$("input", box).forEach(function (i) { if (i.name) v[i.name] = i.value; }); return v; }
@@ -742,7 +785,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#paineis-fin"), abas = $("#abas-fin"), antes = guardar(box), ms = meses();
     var ativa = (abas.querySelector(".ativa") || {}).dataset;
     box.innerHTML = ""; abas.innerHTML = "";
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 4 meses na parte 1.</p>'; return; }
     ms.forEach(function (mm, k) {
       var rot = F.curto(mm[0], mm[1]);
       var b = document.createElement("button"); b.type = "button"; b.textContent = rot; b.dataset.k = k; b.setAttribute("role", "tab");
@@ -792,7 +835,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
 
   function montarVendas() {
     var box = $("#grade-vendas"), antes = guardar(box), html = "";
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 4 meses na parte 1.</p>'; return; }
     meses().forEach(function (mm) {
       var rot = F.curto(mm[0], mm[1]);
       html += '<div class="grupo">' + rot + '</div><div class="linha3">';
@@ -852,7 +895,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#grade-mkt"), antes = guardar(box);
     var lista = $("#h-plataformas").value ? $("#h-plataformas").value.split(", ") : [];
     if (!lista.length) { box.innerHTML = ""; return; }
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 4 meses na parte 1.</p>'; return; }
     var ms = meses();
     box.innerHTML = lista.map(function (base) {
       var html = '<div class="bloco-canal" data-plat="' + base + '"><div class="nome">' + (NOME_PLAT[base] || base) + '</div>';
@@ -896,7 +939,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     var box = $("#grade-eventos"), marcados = {}, nomes = {};
     $$("input[type=checkbox]:checked", box).forEach(function (c) { marcados[c.closest("[data-junta]").dataset.junta + ":" + c.value] = true; });
     $$("input[data-nome-ev]", box).forEach(function (c) { nomes[c.dataset.nomeEv] = c.value; });
-    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 3 meses na parte 1.</p>'; return; }
+    if (!periodoOk()) { box.innerHTML = '<p class="vazio">Escolha um período de 4 meses na parte 1.</p>'; return; }
     box.innerHTML = meses().map(function (mm) {
       var id = idMes(mm), rot = F.curto(mm[0], mm[1]);
       return '<div class="mes-ev"><div class="grupo">' + rot + '</div><div class="chips peq" data-junta="' + id + '">'
@@ -926,6 +969,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
       + campoValor(n + "Valor comprado no período", "", "rs", "")
       + '<div class="campo"><label class="dica" for="fz' + i + '" style="margin:0 0 4px">Prazo para pagar</label><input type="text" id="fz' + i + '" name="' + n + 'Prazo" placeholder="ex.: 30 dias, à vista"></div>'
       + '<div class="campo"><label class="dica" for="ff' + i + '" style="margin:0 0 4px">Frequência de compra</label><input type="text" id="ff' + i + '" name="' + n + 'Frequência" placeholder="ex.: mensal"></div>'
+      + '<div class="campo"><label class="dica" for="fr' + i + '" style="margin:0 0 4px">Prazo de reposição <span class="opc">· do pedido até chegar</span></label><input type="text" id="fr' + i + '" name="' + n + 'Prazo de reposição" placeholder="ex.: 15 dias"></div>'
       + "</div></div>";
   }).join("") + '<button type="button" class="mini" id="mais-forn">+ Adicionar outro fornecedor</button>';
   $("#mais-forn").addEventListener("click", function () {
@@ -936,13 +980,13 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
 
   function atualizarPeriodo() {
     var ms = meses(), el = $("#periodo-txt");
-    if (!periodoOk()) { el.style.color = "var(--erro)"; el.textContent = "Escolha exatamente 3 meses seguidos."; }
+    if (!periodoOk()) { el.style.color = "var(--erro)"; el.textContent = "Escolha exatamente 4 meses seguidos."; }
     else { el.style.color = ""; el.textContent = ms.length + " meses: " + F.MESES[ms[0][0]] + "/" + ms[0][1] + " a " + F.MESES[ms[ms.length - 1][0]] + "/" + ms[ms.length - 1][1]; }
     montarFinanceiro(); montarVendas(); montarMkt(); montarEventos(); F.sincronizar();
   }
-  // o período tem sempre 3 meses: mexeu no início, o fim acompanha; mexeu no fim, o início acompanha
+  // o período tem sempre 4 meses: mexeu no início, o fim acompanha; mexeu no fim, o início acompanha
   function ajustarPeriodo(mudouInicio) {
-    var d = mudouInicio ? new Date(+$("#ini-ano").value, +$("#ini-mes").value + 2, 1) : new Date(+$("#fim-ano").value, +$("#fim-mes").value - 2, 1);
+    var d = mudouInicio ? new Date(+$("#ini-ano").value, +$("#ini-mes").value + N_MESES - 1, 1) : new Date(+$("#fim-ano").value, +$("#fim-mes").value - N_MESES + 1, 1);
     var p = mudouInicio ? "#fim" : "#ini";
     $(p + "-mes").value = d.getMonth(); $(p + "-ano").value = d.getFullYear();
   }
@@ -964,24 +1008,24 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
               : $$('#grade-vendas input[name$="· Pedidos"]').length > 0 && $$('#grade-vendas input[name$="· Pedidos"]').every(function (i) { return i.value.trim(); });
     var relVendas = arq("#f-vendas");
     var canais = $("#h-canais").value ? $("#h-canais").value.split(", ") : [];
-    // canal sem receita informada; com relatório anexado, só cobramos os canais que não têm relatório de marketplace (loja física, Instagram / WhatsApp)
+    // canal sem receita informada; com relatório anexado, só cobramos os canais que não têm relatório de marketplace (Instagram / WhatsApp)
     var semReceita = canais.filter(function (c) {
       return !$$("#canais-detalhe input").some(function (i) { return i.name === "Canal " + c + " · Receita" && i.value.trim(); });
     });
     var nArqVendas = $$("#f-vendas").reduce(function (n, i) { return n + (i.disabled ? 0 : i.files.length); }, 0);
-    var semRelatorio = nArqVendas >= canais.length ? [] : semReceita.filter(function (c) { return c === "Loja física" || c === "Instagram / WhatsApp"; });
+    var semRelatorio = nArqVendas >= canais.length ? [] : semReceita.filter(function (c) { return c === "Instagram / WhatsApp"; });
     var canaisOk = canais.length > 0 && (relVendas ? !semRelatorio.length : !semReceita.length);
     var mkt = ($('input[name="grp-mkt"]:checked') || {}).value;
     var mktDados = arq("#f-ads") || tem("#grade-mkt input") || tem('#canais-detalhe input[name$="· Investimento em anúncios"]');
     var falta = [], leve = [];
-    if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["04 · O dinheiro em conta dá para quanto tempo?", "Depende do extrato bancário do período (parte 7)."]);
-    if (!canaisOk) falta.push(["03 · Quanto custa vender em cada canal?, 06 · Quais canais realmente deixam lucro? e 12 · Qual é a meta de faturamento para investir em anúncios?",
+    if (!arq("#f-ext") && !arq("#f-cart")) falta.push(["05 · Quanto tempo o caixa aguenta?", "Depende do extrato bancário do período (parte 7)."]);
+    if (!canaisOk) falta.push(["03 · Onde a loja ganha e onde perde dinheiro? e 07 · Por onde a loja vende?",
                                canais.length ? (relVendas && semRelatorio.length ? "Informe a receita de " + semRelatorio.join(" e ") + " na parte 3 ou anexe o relatório desse canal."
                                                 : "Dependem do relatório de vendas de cada canal ou da receita de cada canal (parte 3).") : "Dependem dos canais de venda marcados na parte 1."]);
-    if (!relVendas && !arq("#f-prod")) falta.push(["07 · Quais produtos vendem menos e prendem dinheiro? e 08 · Quais são os produtos mais vendidos?", "Dependem do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
-    else if (!arq("#f-cat")) falta.push(["07 · Quais produtos vendem menos e prendem dinheiro? e 08 · Quais são os produtos mais vendidos? (saem sem a sobra de cada produto e sem o estoque parado)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
-    if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["09 · Meus clientes voltam?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
-    if (mkt === "sim" && !mktDados) falta.push(["10 e 11 · As perguntas sobre os anúncios", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
+    if (!relVendas && !arq("#f-prod")) falta.push(["08 · Quais são os produtos mais e menos vendidos? e 09 · O estoque está girando?", "Dependem do relatório de vendas ou do relatório por produto (partes 3 e 4)."]);
+    else if (!arq("#f-cat")) falta.push(["08 · Quais são os produtos mais e menos vendidos? e 09 · O estoque está girando? (saem sem a sobra de cada produto e sem o estoque parado)", "A sobra e o estoque parado dependem da lista de produtos com o custo de cada um (parte 4)."]);
+    if (!relVendas && !arq("#f-cli") && !tem("#c-novos") && !tem("#c-rec")) falta.push(["10 · Os clientes voltam a comprar?", "Depende do relatório de vendas com a identificação do cliente ou dos números de clientes (parte 6)."]);
+    if (mkt === "sim" && !mktDados) falta.push(["04 · O dinheiro investido em anúncio volta?", "Você marcou que investe em anúncios, mas não informou valores nem anexou relatórios (parte 5)."]);
     // marcou onde anuncia, mas deixou os valores em branco e não anexou relatório
     var platVazia = function (p) {
       var b = $$("#grade-mkt [data-plat]").filter(function (x) { return x.dataset.plat === p; })[0];
@@ -989,11 +1033,11 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     };
     if (mkt === "sim" && mktDados && !arq("#f-ads")) {
       if (platVazia("Marketplace Ads") && !tem('#canais-detalhe input[name$="· Investimento em anúncios"]'))
-        falta.push(["10 · Os anúncios dentro das plataformas se pagam?", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
+        falta.push(["04 · O dinheiro investido em anúncio volta? (parte a: nos marketplaces)", "Você marcou Marketplace Ads, mas não informou os valores (parte 5)."]);
       var foraVazias = ["Meta Ads", "Google Ads", "Outro"].filter(platVazia);
-      if (foraVazias.length) falta.push(["11 · O investimento fora das plataformas cabe no meu negócio?", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
+      if (foraVazias.length) falta.push(["04 · O dinheiro investido em anúncio volta? (parte b: fora das plataformas)", "Você marcou " + foraVazias.join(" e ") + ", mas não informou os valores (parte 5)."]);
     }
-    if (mkt !== "sim") leve.push(["10 e 11 · As perguntas sobre os anúncios", mkt === "nao" ? "Só entram para quem investe em anúncios." : "Responda na parte 5 se a loja investe em anúncios."]);
+    if (mkt !== "sim") leve.push(["04 · O dinheiro investido em anúncio volta?", mkt === "nao" ? "Sem anúncio, a pergunta aparece explicando por quê." : "Responda na parte 5 se a loja investe em anúncios."]);
     var nivel = !finOk || !venOk ? "falta" : falta.length ? "parcial" : leve.length ? "quase" : "completo";
     return { nivel: nivel, finOk: finOk, venOk: venOk, falta: falta, leve: leve };
   }
@@ -1041,7 +1085,7 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     [["#loja", "nome da loja"], ["#resp", "responsável"], ["#zap", "WhatsApp"], ["#email", "e-mail"]].forEach(function (c) {
       if (!F.preenchido($(c[0]))) e.push("Parte 1: " + c[1] + ".");
     });
-    if (!periodoOk()) e.push("Parte 1: período de 3 meses.");
+    if (!periodoOk()) e.push("Parte 1: período de 4 meses.");
     if (!$('input[name="Regime tributário"]:checked')) e.push("Parte 1: regime tributário.");
     var modoFin = $('input[name="grp-fin"]:checked').value;
     if (modoFin === "arquivo" && !F.temArquivo("#f-dre")) e.push("Parte 2: anexe a DRE ou planilha financeira (ou escolha preencher aqui).");
@@ -1068,6 +1112,139 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
     $$("#paineis-fin input[readonly]").forEach(function (i) { if (!i.value) i.disabled = true; });
   });
 })();
+</script>
+<script>
+// ---------- painel "Onde encontro isso?": mostra a ajuda da parte em que a pessoa está
+// COMO EDITAR: cada parte (1 a 9) tem temas; cada tema tem slides { t: título, p: texto, img: print, link: endereço, linkTxt }.
+// Os prints ficam em assets/img/ajuda/ (ex.: assets/img/ajuda/mercado-livre-1.png). Print que ainda não existe some sozinho;
+// link vazio ("") não aparece. Na parte 3, os temas dos canais marcados na parte 1 aparecem primeiro.
+(function () {
+  var IMG = "assets/img/ajuda/";
+  var CANAIS = {
+    "Mercado Livre": { slug: "mercado-livre", slides: [
+      { t: "1. Abra as suas vendas", p: "Entre na sua conta de vendedor do Mercado Livre pelo computador e abra a área de <b>Vendas</b>." },
+      { t: "2. Escolha o período e exporte", p: "Filtre pelos 4 meses do diagnóstico e baixe a planilha (Excel). Se o Mercado Livre pedir, baixe em partes: pode mandar todas." },
+      { t: "3. Anexe do jeito que baixou", p: "Não precisa arrumar nada: mande o arquivo como ele saiu. A gente cuida do resto.", link: "", linkTxt: "Ver o tutorial completo" }] },
+    "Shopee": { slug: "shopee", slides: [
+      { t: "1. Abra os seus pedidos", p: "Entre na <b>Central do Vendedor</b> da Shopee pelo computador e abra <b>Meus Pedidos</b>." },
+      { t: "2. Exporte por período", p: "Escolha as datas dos 4 meses e exporte. Se a Shopee limitar o período de cada download, baixe mês a mês e mande todos." },
+      { t: "3. Anexe do jeito que baixou", p: "Mande o arquivo como saiu, sem arrumar.", link: "", linkTxt: "Ver o tutorial completo" }] },
+    "Site próprio": { slug: "site", slides: [
+      { t: "Nuvemshop", p: "No painel, vá em <b>Vendas › Lista de vendas</b> e clique em <b>Exportar lista</b>. Filtre os 4 meses. O arquivo chega por e-mail e também fica para baixar no painel.",
+        link: "https://atendimento.nuvemshop.com.br/pt_BR/minhas-vendas/como-exportar-as-minhas-vendas-para-uma-planilha", linkTxt: "Ajuda da Nuvemshop" },
+      { t: "Shopify, Tray, Loja Integrada e outras", p: "Procure a lista de <b>pedidos</b> no painel da loja, filtre os 4 meses e exporte em CSV ou Excel." },
+      { t: "Usa um sistema de gestão?", p: "Bling, Tiny e parecidos juntam as vendas de todos os canais: um relatório de vendas de lá pode substituir os outros." }] },
+    "TikTok Shop": { slug: "tiktok-shop", slides: [
+      { t: "Pedidos do TikTok Shop", p: "No <b>Seller Center</b> do TikTok Shop, abra os pedidos, filtre os 4 meses e exporte. Mande o arquivo como saiu.", link: "", linkTxt: "Ver o tutorial completo" }] },
+    "Instagram / WhatsApp": { slug: "instagram", slides: [
+      { t: "Esse canal não tem relatório", p: "Tudo bem: informe na tabela <b>Números por canal</b>, logo abaixo, quanto vendeu e quantos pedidos fez no período." },
+      { t: "Como você recebe?", p: "Link de pagamento ou maquininha (Mercado Pago, PagBank, InfinitePay...): o extrato deles ajuda a confirmar. Anexe na parte 7." }] },
+    "_outro": { slug: "marketplace", slides: [
+      { t: "Outros marketplaces", p: "Amazon, Magalu, Shein, Americanas, Casas Bahia, Elo7: no painel do vendedor, procure o relatório de <b>pedidos</b> ou <b>vendas</b>, filtre os 4 meses e exporte. Mande como saiu." }] }
+  };
+  var PARTES = [
+    { nome: "Dados do negócio", temas: [
+      { nome: "Período", slides: [
+        { t: "Quais meses escolher", p: "Os <b>4 meses mais recentes já fechados</b>. Exemplo: se estamos em novembro, de julho a outubro." },
+        { t: "Por que 4 meses?", p: "Para mostrar para onde a loja está indo, e não só uma foto de um mês." }] },
+      { nome: "Regime e alíquota", slides: [
+        { t: "Regime tributário", p: "MEI, Simples Nacional ou Lucro Presumido. Está no cadastro da empresa ou com o seu contador." },
+        { t: "Alíquota", p: "A porcentagem de imposto sobre as vendas. No Simples, aparece na guia do DAS ou com o contador. Não sabe? Pode deixar em branco." }] }] },
+    { nome: "Resultado financeiro", temas: [
+      { nome: "DRE", slides: [
+        { t: "O que é a DRE", p: "O resumo do resultado: quanto vendeu, quanto custou e quanto sobrou. Peça ao seu contador ou exporte do sistema financeiro, <b>separada por mês</b>." }] },
+      { nome: "Preencher aqui", slides: [
+        { t: "Valores aproximados valem", p: "Comece pelo faturamento de cada mês e preencha os custos que você sabe. O que não souber, deixe em branco." },
+        { t: "CMV (custo dos produtos)", p: "Quanto custaram os produtos que você vendeu. Não sabe o valor exato? Use o custo médio: se um produto de R$ 100 custa R$ 30, o CMV é cerca de 30% do que vendeu." },
+        { t: "Despesas fixas", p: "Use o botão <b>Repetir as despesas</b> para copiar do mês anterior o que não muda (aluguel, sistemas, contador)." }] }] },
+    { nome: "Vendas", temas: "canais" },
+    { nome: "Produtos", temas: [
+      { nome: "Relatório por produto", slides: [
+        { t: "Vendas por produto", p: "No painel do canal ou no seu sistema (Bling, Tiny...), procure o relatório de vendas <b>por produto</b>, com quantidade e valor." }] },
+      { nome: "Custo e estoque", slides: [
+        { t: "Lista de produtos", p: "Exporte o cadastro de produtos do sistema. Não tem sistema? Uma planilha simples serve: <b>SKU ou nome, custo por unidade e estoque</b>." }] }] },
+    { nome: "Marketing", temas: [
+      { nome: "Anúncios nos marketplaces", slides: [
+        { t: "Mercado Ads, Shopee Ads e outros", p: "O painel de anúncios de cada canal mostra o <b>investimento</b> e as <b>vendas</b> do período. Exporte o relatório ou tire um print." }] },
+      { nome: "Meta e Google", slides: [
+        { t: "Instagram, Facebook e Google", p: "No Gerenciador de Anúncios (Meta) ou no Google Ads, escolha os 4 meses e veja o valor usado. Um print da tela já serve." }] }] },
+    { nome: "Clientes", temas: [
+      { nome: "Precisa preencher?", slides: [
+        { t: "Talvez não", p: "Se o relatório de vendas mostra quem comprou (nome, e-mail ou usuário), já sabemos quem voltou. Pode pular esta parte." }] }] },
+    { nome: "Caixa", temas: [
+      { nome: "Extrato do banco", slides: [
+        { t: "1. Abra o extrato", p: "No internet banking ou no app do banco, abra o <b>extrato</b> da conta da loja e escolha o período dos 4 meses." },
+        { t: "2. Salve em OFX", p: "OFX é o formato que os sistemas de finanças usam. Não tem? CSV, Excel ou PDF também servem." },
+        { t: "3. Período limitado?", p: "Alguns bancos só deixam baixar alguns dias de cada vez. Baixe em partes, mês a mês, e mande todas.",
+          link: "https://www.meucontadoronline.com.br/blog/como-exportar-o-extrato-do-itau-em-arquivo-ofx/", linkTxt: "Exemplo: extrato do Itaú em OFX" },
+        { t: "Conta misturada com a pessoal?", p: "Mande assim mesmo e conte isso na parte 9. A gente separa o que é da loja." }] },
+      { nome: "Carteiras", slides: [
+        { t: "Mercado Pago, PagBank, Stone...", p: "Onde o dinheiro das vendas cai antes de ir para o banco. Cada uma tem extrato para baixar: anexe também." }] }] },
+    { nome: "Fornecedores", temas: [
+      { nome: "Os prazos", slides: [
+        { t: "Prazo para pagar", p: "Quantos dias depois da compra você paga o fornecedor. Ex.: 30 dias, à vista." },
+        { t: "Prazo de reposição", p: "Quantos dias entre fazer o pedido e a mercadoria chegar. Ajuda a saber quanto estoque a loja precisa ter." }] }] },
+    { nome: "Contexto da operação", temas: [
+      { nome: "O que contar", slides: [
+        { t: "Ajuda a explicar os números", p: "Promoção, falta de produto, canal novo, troca de fornecedor, mês fraco. Cada acontecimento marcado aparece no relatório ao lado do mês." },
+        { t: "A sua dúvida", p: "Escreva a pergunta que mais te incomoda sobre a loja. Ela é respondida no seu relatório." }] }] }
+  ];
+  var $ = F.$, $$ = F.$$;
+  var painel = $("#ajuda"), estado = { parte: 0, tema: 0, slide: 0 };
+
+  function temasDa(k) {
+    var p = PARTES[k];
+    if (p.temas !== "canais") return p.temas;
+    var marcados = $("#h-canais").value ? $("#h-canais").value.split(", ") : [];
+    var lista = [], vistos = {};
+    marcados.concat(["Mercado Livre", "Shopee", "Site próprio", "TikTok Shop", "Instagram / WhatsApp"]).forEach(function (c) {
+      var chave = CANAIS[c] ? c : "_outro";
+      if (vistos[chave]) return;
+      vistos[chave] = 1;
+      lista.push({ nome: chave === "_outro" ? "Outros marketplaces" : c, slug: CANAIS[chave].slug, slides: CANAIS[chave].slides });
+    });
+    if (!vistos._outro) lista.push({ nome: "Outros marketplaces", slug: CANAIS._outro.slug, slides: CANAIS._outro.slides });
+    return lista;
+  }
+  function slug(t) { return (t.slug || t.nome).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+  function desenhar() {
+    var temas = temasDa(estado.parte), tema = temas[estado.tema] || temas[0], sl = tema.slides[estado.slide] || tema.slides[0];
+    $("#aj-parte").textContent = "Parte " + (estado.parte + 1) + " · " + PARTES[estado.parte].nome;
+    $("#aj-temas").innerHTML = temas.length > 1 ? temas.map(function (t, i) {
+      return '<button type="button" data-tema="' + i + '" class="' + (i === estado.tema ? "ativo" : "") + '">' + t.nome + "</button>";
+    }).join("") : "";
+    var img = sl.img || IMG + slug(tema) + "-" + (estado.slide + 1) + ".png";
+    $("#aj-slide").innerHTML = "<h4>" + sl.t + "</h4><p>" + sl.p + "</p>"
+      + '<figure><img src="' + img + '" alt="' + sl.t.replace(/"/g, "") + '" loading="lazy" onerror="this.parentNode.hidden=true"></figure>'
+      + (sl.link ? '<a class="aj-link" href="' + sl.link + '" target="_blank" rel="noopener">' + (sl.linkTxt || "Ver o passo a passo") + " ↗</a>" : "");
+    var n = tema.slides.length;
+    $("#aj-pontos").innerHTML = n > 1 ? tema.slides.map(function (_, i) { return '<i class="' + (i === estado.slide ? "at" : "") + '"></i>'; }).join("") : "";
+    $("#aj-ant").disabled = estado.slide === 0;
+    $("#aj-prox").disabled = estado.slide >= n - 1;
+    $("#aj-ant").style.visibility = $("#aj-prox").style.visibility = n > 1 ? "" : "hidden";
+  }
+  function irParte(k) { if (k === estado.parte) return; estado = { parte: k, tema: 0, slide: 0 }; desenhar(); }
+  $("#aj-temas").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-tema]"); if (!b) return; estado.tema = +b.dataset.tema; estado.slide = 0; desenhar();
+  });
+  $("#aj-ant").addEventListener("click", function () { if (estado.slide > 0) { estado.slide--; desenhar(); } });
+  $("#aj-prox").addEventListener("click", function () { estado.slide++; desenhar(); });
+  $("#btn-ajuda").addEventListener("click", function () { painel.classList.add("aberta"); this.hidden = true; });
+  $("#aj-fechar").addEventListener("click", function () { painel.classList.remove("aberta"); $("#btn-ajuda").hidden = false; });
+  // a parte em que a pessoa está: a que ela está preenchendo (foco) ou a que está no meio da tela
+  var partes = $$("#form fieldset");
+  document.addEventListener("focusin", function (e) { var f = e.target.closest && e.target.closest("fieldset"); if (f) irParte(partes.indexOf(f)); });
+  if ("IntersectionObserver" in window) {
+    var obs = new IntersectionObserver(function (es) {
+      es.forEach(function (en) { if (en.isIntersecting) irParte(partes.indexOf(en.target)); });
+    }, { rootMargin: "-35% 0px -55% 0px" });
+    partes.forEach(function (f) { obs.observe(f); });
+  }
+  // mudou os canais na parte 1: a ajuda da parte 3 acompanha
+  $("#canais").addEventListener("change", function () { if (estado.parte === 2) { estado.tema = 0; estado.slide = 0; desenhar(); } });
+  desenhar();
+})();
+
 </script>
 </body>
 </html>
