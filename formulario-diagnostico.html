@@ -219,6 +219,7 @@
     .ajuda { display: block; position: sticky; top: 24px; margin-top: 32px; max-height: calc(100vh - 48px); overflow: auto; }
     .aj-fechar, .btn-ajuda { display: none; }
   }
+  [hidden] { display:none !important; }
 </style>
 </head>
 <body>
@@ -281,7 +282,7 @@
       </div>
       <div class="campo">
         <span class="t">Canais de venda</span>
-        <span class="dica">Marque todos em que a loja vendeu no período (até 10).</span>
+        <span class="dica">Marque todos em que a loja vendeu no período.</span>
         <div class="chips" id="canais" data-junta="h-canais" data-outro="canal-outro" data-max="10">
           <label><input type="checkbox" value="Mercado Livre"><span>Mercado Livre</span></label>
           <label><input type="checkbox" value="Shopee"><span>Shopee</span></label>
@@ -296,7 +297,7 @@
           <label><input type="checkbox" value="Elo7"><span>Elo7</span></label>
         </div>
         <input type="text" id="canal-outro" placeholder="Outro canal? Escreva aqui (mais de um? separe por vírgula)" style="margin-top:10px" data-sempre>
-        <span class="dica" id="canais-limite" style="margin-top:8px">Vende em mais de 10 canais? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20mais%20de%2010%20canais." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a>.</span>
+        <span class="dica" id="canais-limite" hidden style="margin-top:8px">A sua loja vende em muitos canais? <a href="https://wa.me/5562996653913?text=Oi!%20Minha%20loja%20vende%20em%20muitos%20canais%20e%20quero%20incluir%20todos%20no%20Diagn%C3%B3stico." target="_blank" rel="noopener" style="color:var(--laranja)">Chame no WhatsApp</a> que a gente inclui todos.</span>
       </div>
 
       <div class="campo">
@@ -871,12 +872,12 @@ window.addEventListener("pageshow", function (e) { if (e.persisted) location.rel
         + "</div></div>";
     }).join("");
   }
-  // limite de canais deste formulário (o Diagnóstico padrão cobre até 3): o que passar do limite é desfeito e o aviso acende
+  // limite técnico de canais (a planilha tem 10 linhas): o que passar é desfeito e só então o aviso aparece
   var MAX_CANAIS = +($("#canais").dataset.max || 0);
   function contarCanais() { F.juntar(); return $("#h-canais").value ? $("#h-canais").value.split(", ").length : 0; }
   function avisoLimite(aceso) {
     var a = $("#canais-limite");
-    if (a) { a.style.color = aceso ? "var(--erro)" : ""; a.style.fontWeight = aceso ? "600" : ""; }
+    if (a) { a.hidden = !aceso; }
   }
   function limitarCanais(e) {
     if (!MAX_CANAIS) return;
